@@ -301,6 +301,7 @@
 
     .status .note {
       margin-top: 10px;
+      margin-bottom: 10px;
       padding: 10px 12px;
       background: var(--amber-soft);
       color: #7a5300;
@@ -630,14 +631,19 @@
 
           <fieldset>
             <legend>Who's organizing</legend>
-            <label>Your name <input type="text" id="organizer" required></label>
+            <label>Your name
+              <input type="text" id="organizer" required>
+            </label>
+            <label>Email address
+              <input type="email" id="email" placeholder="yourname@ciaschool.edu.kh" autocomplete="email" required>
+            </label>
             <label>Notes (Optional)
               <textarea id="notes" rows="3" placeholder="Anything people should know?"></textarea>
             </label>
           </fieldset>
 
           <div id="form-status" class="status" role="status" hidden></div>
-          <button type="submit" class="btn" id="check-btn">Check availability</button>
+          <button type="button" class="btn" id="check-btn">Check availability</button>
           <button type="button" class="btn book" id="book-btn" hidden>Book now</button>
         </form>
 
@@ -700,7 +706,7 @@
     }
 
     // Match locations ignoring capitals and extra spaces ("room 201" = "Room  201")
-    const normRoom = (r) => r.trim().toLowerCase().replace(/\s+/g, " ");
+    const normRoom = (r) => String(r ?? "").trim().toLowerCase().replace(/\s+/g, " ");
     const sameRoom = (a, b) => normRoom(a) === normRoom(b);
 
     // ---------- Tabs ----------
@@ -753,12 +759,13 @@
         end: $("end").value,
         room: $("room").value.trim().replace(/\s+/g, " "),
         organizer: $("organizer").value.trim(),
+        email: $("email").value.trim(),
         notes: $("notes").value.trim(),
       };
     }
 
     function validateForm() {
-      const required = ["name", "type", "date", "start", "end", "room", "organizer"];
+      const required = ["name", "type", "date", "start", "end", "room", "organizer", "email"];
       let missing = false;
       required.forEach((id) => {
         const empty = !$(id).value.trim();
@@ -774,22 +781,15 @@
         showStatus("End time must be after the start time.", "error");
         return false;
       }
+      if (!$("email").validity.valid) {
+        showStatus("Please enter a valid email address.", "error");
+        return false;
+      }
       return true;
     }
 
     function findConflicts(d) {
       return bookings.filter((b) => b.date === d.date && sameRoom(b.room, d.room) && overlaps(d.start, d.end, b.start, b.end));
-    }
-
-    let checkId = 0; // lets us ignore a check if the form changed while it was loading
-
-    function setIdle() {
-      const btn = $("check-btn");
-      btn.hidden = false;
-      btn.disabled = false;
-      btn.classList.remove("loading");
-      btn.textContent = "Check availability";
-      $("book-btn").hidden = true;
     }
 
     function showConflict(d) {
@@ -807,51 +807,121 @@
       return `<div class="note">Just so you know, ${near.length === 1 ? "another meeting is" : "other meetings are"} happening at the same time:<ul>${items}</ul></div>`;
     }
 
+    function validateFutureMeeting(d) {
+      const now = new Date();
+
+      const meetingStart = new Date(`${d.date}T${d.start}:00`);
+
+      if (Number.isNaN(meetingStart.getTime())) {
+        showStatus(
+          "Please select a valid meeting date and time.",
+          "error"
+        );
+        return false;
+      }
+
+      // Check if the selected date has already passed
+      if (d.date < daysFromNow(0)) {
+        showStatus(
+          `<strong>This date has already passed.</strong>
+       <p>Please select today or a future date to schedule your meeting.</p>`,
+          "error"
+        );
+        return false;
+      }
+
+      // Check if the meeting's starting time has already passed
+      if (meetingStart <= now) {
+        showStatus(
+          `<strong>This time has already passed.</strong>
+       <p>Please select a later starting time to schedule your meeting.</p>`,
+          "error"
+        );
+        return false;
+      }
+
+      return true;
+    }
+
     function checkAvailability() {
       if (!validateForm()) return;
+
       const d = readForm();
       const btn = $("check-btn");
-      const myCheck = ++checkId;
 
       $("form-status").hidden = true;
-      btn.disabled = true;
-      btn.classList.add("loading");
-      btn.textContent = "Checking availability...";
 
-      // The short delay stands in for the real wait once this talks to Google Sheets.
-      setTimeout(() => {
-        if (myCheck !== checkId) return;
+      // Check whether the selected date/time is in the past
+      if (!validateFutureMeeting(d)) {
         setIdle();
-        if (findConflicts(d).length) return showConflict(d);
+        return;
+      }
 
-        showStatus(`<strong>Good news!</strong> ${esc(d.room)} is available on ${formatDay(d.date)} from ${formatTime(d.start)} to ${formatTime(d.end)}.${headsUp(d)}`, "ok");
-        btn.hidden = true;
-        $("book-btn").hidden = false;
-      }, 900);
+      // Check whether the room is already booked
+      const conflicts = findConflicts(d);
+
+      if (conflicts.length > 0) {
+        showConflict(d);
+        setIdle();
+        return;
+      }
+
+      showStatus(
+        `<strong>Good news!</strong> ${esc(d.room)} is available on
+    ${formatDay(d.date)} from ${formatTime(d.start)}
+    to ${formatTime(d.end)}.
+    ${headsUp(d)}`,
+        "ok"
+      );
+
+      btn.hidden = true;
+      $("book-btn").hidden = false;
     }
 
     async function bookNow() {
       if (!validateForm()) return;
-
       const d = readForm();
+      if (!validateFutureMeeting(d)) {
+        setIdle();
+        return;
+      }
       const btn = $("book-btn");
-
       btn.disabled = true;
       btn.textContent = "Booking...";
 
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify({
-            action: "createBooking",
-            booking: d
-          })
-        });
+        let result;
 
-        const result = await response.json();
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+              action: "createBooking",
+              booking: d
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error("HTTP error: " + response.status);
+          }
+
+          result = await response.json();
+
+        } catch (error) {
+          console.error("Booking response error:", error);
+
+          showStatus(
+            `<strong>Unable to confirm booking.</strong>
+     <p>Your meeting may already have been saved.
+     Please check the schedule before trying again.</p>`,
+            "error"
+          );
+
+          return;
+        }
 
         if (!result.success) {
 
@@ -868,7 +938,7 @@
 
           } else {
             showStatus(
-              "Something went wrong while booking. Please try again.",
+              esc(result.message || "Booking failed. Please check your details."),
               "error"
             );
           }
@@ -876,20 +946,46 @@
           return;
         }
 
-        await loadBookings();
+        // Booking was confirmed by the backend.
+        // Display it immediately without waiting for another API request.
+        const confirmedBooking = {
+          ...d,
+          id: result.booking?.id || ""
+        };
+
+        if (!bookings.some(b => b.id && b.id === confirmedBooking.id)) {
+          bookings.push(confirmedBooking);
+        }
+
+        renderSchedule();
+        updateRoomList();
+
+        // Refresh from Google Sheets in the background.
+        loadBookings();
 
         $("booking-form").reset();
+
         $("eagle-hint").hidden = true;
         setIdle();
 
         showStatus(
           `<strong>You're booked!</strong>
-      ${esc(d.name)} has ${esc(d.room)} on
-      ${formatDay(d.date)}, ${formatTime(d.start)}
-      to ${formatTime(d.end)}.
-      <button type="button" class="link" id="go-schedule">
-      View schedule
-      </button>`,
+          ${esc(d.name)} has ${esc(d.room)} on
+          ${formatDay(d.date)}, ${formatTime(d.start)}
+          to ${formatTime(d.end)}.
+
+          <div class="note">
+            <strong>Management code: ${esc(result.managementCode)}</strong><br>
+            Save this code. You'll need it to edit or cancel this meeting.
+          </div>
+
+          ${result.emailSent
+            ? `<p>📧 Confirmation email sent to ${esc(d.email)}.</p>`
+            : `<p>⚠️ We couldn't send your confirmation email.
+            Please save your management code above.</p>`
+          }
+
+          <button type="button" class="link" id="go-schedule"> View schedule </button>`,
           "ok"
         );
 
@@ -908,25 +1004,43 @@
       }
     }
 
-    $("booking-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      checkAvailability();
-    });
+    $("check-btn").addEventListener("click", checkAvailability);
     $("book-btn").addEventListener("click", bookNow);
 
     // Take people to the schedule from the success message
     $("form-status").addEventListener("click", (e) => {
-      if (e.target.id === "go-schedule") document.querySelector('.tab[data-view="schedule"]').click();
+      if (e.target.id === "go-schedule") {
+        document.querySelector('.tab[data-view="schedule"]').click();
+        renderSchedule();
+        loadBookings();
+      }
     });
 
     // Editing the form makes any earlier result out of date, so start over
-    ["input", "change"].forEach((evt) =>
+    ["input", "change"].forEach((evt) => {
       $("booking-form").addEventListener(evt, (e) => {
-        e.target.classList.remove("invalid");
+        if (e.target.classList) {
+          e.target.classList.remove("invalid");
+        }
+
+        // Clear the previous availability result
         $("form-status").hidden = true;
-        checkId++;
+
+        // Reset the buttons so users can check again
         setIdle();
-      }));
+      });
+    });
+
+    function setIdle() {
+      const btn = $("check-btn");
+
+      btn.hidden = false;
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      btn.textContent = "Check availability";
+
+      $("book-btn").hidden = true;
+    }
 
     // ---------- Schedule ----------
     let activeFilter = "All";
@@ -1010,21 +1124,59 @@
     });
 
     async function loadBookings() {
-      try {
-        const response = await fetch(API_URL + "?action=getBookings");
-        const data = await response.json();
+      const list = $("schedule-list");
 
-        if (!data.success) {
-          throw new Error(data.message || "Could not load bookings.");
+      if (bookings.length === 0) {
+        list.innerHTML = '<p class="empty">Loading meetings...</p>';
+      }
+
+      try {
+        const response = await fetch(
+          API_URL + "?action=getBookings&t=" + Date.now(),
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error("Server returned " + response.status);
         }
 
-        bookings = data.bookings;
+        const data = await response.json();
+
+        if (!data.success || !Array.isArray(data.bookings)) {
+          throw new Error(data.message || "Invalid booking data.");
+        }
+
+        bookings = data.bookings.map((b) => ({
+          ...b,
+          room: String(b.room ?? ""),
+          name: String(b.name ?? ""),
+          type: String(b.type ?? ""),
+          organizer: String(b.organizer ?? ""),
+          notes: String(b.notes ?? "")
+        }));
 
         renderSchedule();
         updateRoomList();
 
+        return true;
+
       } catch (error) {
         console.error("Failed to load bookings:", error);
+
+        if (bookings.length === 0) {
+          list.innerHTML = `
+        <p class="empty">
+          Couldn't load the schedule. Please try again.
+        </p>
+        <button type="button" class="btn" id="retry-schedule">
+          Retry loading
+        </button>
+      `;
+
+          $("retry-schedule").addEventListener("click", loadBookings);
+        }
+
+        return false;
       }
     }
 
