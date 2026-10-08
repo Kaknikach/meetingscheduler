@@ -908,10 +908,21 @@
             throw new Error("HTTP error: " + response.status);
           }
 
-          result = await response.json();
+          const rawResponse = await response.text();
+
+          console.log("HTTP status:", response.status);
+          console.log("Raw booking response:", JSON.stringify(rawResponse));
+          console.log("Response URL:", response.url);
+
+          if (!rawResponse.trim()) {
+            throw new Error("Google Apps Script returned an empty response.");
+          }
+
+          result = JSON.parse(rawResponse);
 
         } catch (error) {
           console.error("Booking response error:", error);
+          setIdle();
 
           showStatus(
             `<strong>Unable to confirm booking.</strong>
