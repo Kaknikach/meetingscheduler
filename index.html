@@ -676,7 +676,9 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     }
 
-    const bookings = [];
+    const API_URL = "https://script.google.com/a/macros/ciaschool.edu.kh/s/AKfycbyf6mQcMd7v4oQ2FZjW3VHHgb9I0aHapM692rJK69YinlH4Eie_JRZ9yAnZLeq_MSks/exec";
+
+    let bookings = [];
 
     // ---------- Helpers ----------
     const $ = (id) => document.getElementById(id);
@@ -828,20 +830,82 @@
       }, 900);
     }
 
-    function bookNow() {
-      const d = readForm();
-      if (findConflicts(d).length) { setIdle(); return showConflict(d); }
+    async function bookNow() {
+      if (!validateForm()) return;
 
-      const note = headsUp(d);
-      bookings.push(d);
-      renderSchedule();
-      updateRoomList();
-      $("booking-form").reset();
-      $("eagle-hint").hidden = true;
-      setIdle();
-      showStatus(
-        `<strong>You're booked!</strong> ${esc(d.name)} has ${esc(d.room)} on ${formatDay(d.date)}, ${formatTime(d.start)} to ${formatTime(d.end)}. ` +
-        `<button type="button" class="link" id="go-schedule">View schedule</button>${note}`, "ok");
+      const d = readForm();
+      const btn = $("book-btn");
+
+      btn.disabled = true;
+      btn.textContent = "Booking...";
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            action: "createBooking",
+            booking: d
+          })
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+          if (result.conflict && result.meeting) {
+            const c = result.meeting;
+
+            showStatus(
+              `<strong>Bad news. That room was just booked.</strong>
+          <p><strong>${esc(c.name)}</strong> has ${esc(c.room)}
+          from ${formatTime(c.start)} to ${formatTime(c.end)}.</p>
+          <p>Try another room or time.</p>`,
+              "error"
+            );
+
+          } else {
+            showStatus(
+              "Something went wrong while booking. Please try again.",
+              "error"
+            );
+          }
+
+          return;
+        }
+
+        await loadBookings();
+
+        $("booking-form").reset();
+        $("eagle-hint").hidden = true;
+        setIdle();
+
+        showStatus(
+          `<strong>You're booked!</strong>
+      ${esc(d.name)} has ${esc(d.room)} on
+      ${formatDay(d.date)}, ${formatTime(d.start)}
+      to ${formatTime(d.end)}.
+      <button type="button" class="link" id="go-schedule">
+      View schedule
+      </button>`,
+          "ok"
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+          "Couldn't connect to the booking system. Please try again.",
+          "error"
+        );
+
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Book this room";
+      }
     }
 
     $("booking-form").addEventListener("submit", (e) => {
@@ -945,7 +1009,26 @@
       renderSchedule();
     });
 
-    renderSchedule();
+    async function loadBookings() {
+      try {
+        const response = await fetch(API_URL + "?action=getBookings");
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.message || "Could not load bookings.");
+        }
+
+        bookings = data.bookings;
+
+        renderSchedule();
+        updateRoomList();
+
+      } catch (error) {
+        console.error("Failed to load bookings:", error);
+      }
+    }
+
+    loadBookings();
   </script>
 </body>
 
