@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eagle Bookings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1b3a;
+      --ink: #0f1b33;
+      --muted: #5a6a88;
+      --paper: #e9f0fa;
+      --card: #ffffff;
+      --line: #d3dded;
+      --btn: #2cb9c6;
+      --btn-dark: #0a7f8c;
+      /* Check availability + Book now */
+      --accent: #14b8a6;
+      --accent-dark: #0b7f73;
+      --accent-soft: #dff7f3;
+      --clubs: #4da3ff;
+      --assembly: #f06fa8;
+      --event: #8b5cf6;
+      /* schedule edge colors: clubs, assemblies, events */
+      --amber: #f5b83d;
+      --amber-soft: #fff3d6;
+      /* Eagle Period + overlap highlight */
+      --coral: #e5484d;
+      --radius: 20px;
+      --shadow: 0 10px 30px rgba(15, 27, 51, .07);
+      --head: "Quicksand", "Nunito", system-ui, sans-serif;
+      --body: "Nunito", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--body);
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+    }
+
+    h1,
+    h2,
+    h3,
+    legend {
+      font-family: var(--head);
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Top bar */
+    .topbar {
+      color: #fff;
+      padding: 22px clamp(16px, 4vw, 48px) 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      background: var(--navy);
+    }
+
+    .brand {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding-bottom: 18px;
+    }
+
+    .brand h1 {
+      font-size: 1.7rem;
+      letter-spacing: -.01em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: #9fb3d9;
+      font-size: .95rem;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab {
+      font: 700 .95rem var(--body);
+      background: none;
+      color: #9fb3d9;
+      border: 0;
+      padding: 12px 22px;
+      border-radius: 16px 16px 0 0;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .tab:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .15);
+    }
+
+    .tab.is-active {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    /* Layout */
+    main {
+      padding: clamp(16px, 4vw, 48px);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.is-active {
+      display: block;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      font-size: 1.6rem;
+      margin-bottom: 22px;
+    }
+
+    /* Form */
+    fieldset {
+      border: 0;
+      padding: 0;
+      margin: 0 0 26px;
+      display: grid;
+      gap: 14px;
+    }
+
+    legend {
+      font-size: 1.15rem;
+      padding: 0;
+      margin-bottom: 12px;
+      color: var(--btn-dark);
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+      font: 500 1rem var(--body);
+      color: inherit;
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 48px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2314b8a6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 18px center / 14px;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, .2);
+    }
+
+    .btn:focus-visible,
+    .tab:focus-visible,
+    .chip:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    input.invalid,
+    select.invalid {
+      border-color: var(--coral);
+    }
+
+    .btn {
+      font: 800 1rem var(--body);
+      width: 100%;
+      background: var(--btn);
+      color: var(--navy);
+      border: 2px solid var(--btn);
+      padding: 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(44, 185, 198, .3);
+      transition: all .25s ease;
+    }
+
+    .btn:hover {
+      background: #fff;
+      color: var(--btn-dark);
+      box-shadow: none;
+    }
+
+    .btn:disabled {
+      cursor: wait;
+      opacity: .85;
+    }
+
+    .btn.loading::before {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: 10px;
+      border: 2px solid rgba(11, 27, 58, .25);
+      border-top-color: var(--navy);
+      border-radius: 50%;
+      vertical-align: -2px;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hint {
+      background: var(--amber-soft);
+      border-left: 4px solid var(--amber);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: .9rem;
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      font-size: .95rem;
+    }
+
+    .status.error {
+      background: #fdecee;
+      color: #a3212b;
+    }
+
+    .status.ok {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .status ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .status p {
+      margin: 8px 0 0;
+    }
+
+    .status .note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--amber-soft);
+      color: #7a5300;
+      border-radius: 10px;
+    }
+
+    .link {
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      font-weight: 800;
+      color: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .side {
+      background: #c4f0ea;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .side h2 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    .side ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--ink);
+      display: grid;
+      gap: 8px;
+    }
+
+    /* Schedule */
+    .schedule-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .schedule-head h2 {
+      font-size: 1.7rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font: 700 .9rem var(--body);
+      background: #fff;
+      color: var(--ink);
+      border: 1.5px solid var(--line);
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .chip:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .chip.is-active {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+    }
+
+    .day {
+      margin-bottom: 30px;
+    }
+
+    .day h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .day-tag {
+      font: 800 .75rem var(--body);
+      background: var(--amber);
+      color: #4a3200;
+      padding: 3px 11px;
+      border-radius: 999px;
+    }
+
+    .meeting {
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--clubs);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .meeting[data-type="Assembly"] {
+      border-left-color: var(--assembly);
+    }
+
+    .meeting[data-type="School event"] {
+      border-left-color: var(--event);
+    }
+
+    .meeting .time,
+    .col .time {
+      font: 700 .98rem var(--head);
+    }
+
+    .title {
+      font-weight: 800;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .notes {
+      margin-top: 4px;
+      font-size: .86rem;
+      color: #3f4a66;
+      overflow-wrap: anywhere;
+    }
+
+    .room {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      padding: 5px 13px;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 800;
+    }
+
+    /* Meetings happening at the same time */
+    .cluster {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .cluster-head {
+      background: var(--amber-soft);
+      color: #7a5300;
+      padding: 10px 20px;
+      font-size: .88rem;
+    }
+
+    .cluster-head span {
+      opacity: .75;
+    }
+
+    .cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .col {
+      background: var(--card);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 4px solid var(--clubs);
+    }
+
+    .col[data-type="Assembly"] {
+      border-top-color: var(--assembly);
+    }
+
+    .col[data-type="School event"] {
+      border-top-color: var(--event);
+    }
+
+    .col .title {
+      margin-top: 4px;
+    }
+
+    .col .meta {
+      margin-bottom: 14px;
+    }
+
+    .col .meta:has(+ .notes) {
+      margin-bottom: 0;
+    }
+
+    .col .notes {
+      margin-bottom: 14px;
+    }
+
+    .col .room {
+      margin-top: auto;
+      align-self: flex-start;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 0;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .side {
+        order: -1;
+      }
+
+      .meeting {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .meeting .room {
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Phones: overlapping meetings sit side by side, two per row */
+    @media (max-width: 600px) {
+      .cols {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .col {
+        padding: 14px 12px;
+      }
+
+      .col .time {
+        font-size: .85rem;
+      }
+
+      .col .title {
+        overflow-wrap: anywhere;
+      }
+
+      .col:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <h1>Eagle Bookings</h1>
+        <p>Rooms and meetings, all in one place</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Main sections">
+      <button class="tab is-active" role="tab" aria-selected="true" data-view="book">Book a meeting</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="schedule">View schedule</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- BOOK -->
+    <section id="view-book" class="view is-active">
+      <div class="layout">
+        <form id="booking-form" class="card" novalidate>
+          <h2>Book a room</h2>
+
+          <fieldset>
+            <legend>What's happening</legend>
+            <label>Club, group or event name
+              <input type="text" id="name" placeholder="e.g. Your club name" required>
+            </label>
+            <label>Meeting type
+              <select id="type" required>
+                <option value="">Choose a type</option>
+                <option>Club meeting</option>
+                <option>Assembly</option>
+                <option>School event</option>
+                <option>Other</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>When and where</legend>
+            <label>Date
+              <input type="date" id="date" required>
+            </label>
+            <div id="eagle-hint" class="hint" hidden>It's a Wednesday. Eagle Period rooms fill up fast, so check the
+              schedule first.</div>
+            <div class="row">
+              <label>Start time <input type="time" id="start" required></label>
+              <label>End time <input type="time" id="end" required></label>
+            </div>
+            <label>Room or location
+              <input type="text" id="room" list="room-list" placeholder="e.g. Conference room, Auditorium, Room 101"
+                autocomplete="off" required>
+              <datalist id="room-list"></datalist>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Who's organizing</legend>
+            <label>Your name <input type="text" id="organizer" required></label>
+            <label>Notes (Optional)
+              <textarea id="notes" rows="3" placeholder="Anything people should know?"></textarea>
+            </label>
+          </fieldset>
+
+          <div id="form-status" class="status" role="status" hidden></div>
+          <button type="submit" class="btn" id="check-btn">Check availability</button>
+          <button type="button" class="btn book" id="book-btn" hidden>Book now</button>
+        </form>
+
+        <aside class="card side">
+          <h2>Before you book</h2>
+          <ul>
+            <li>Pick a room that isn't already taken at your time.</li>
+            <li>If there's a clash, you'll see who has the room and when.</li>
+            <li>Booked meetings show up on the schedule right away.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section id="view-schedule" class="view">
+      <div class="schedule-head">
+        <h2>Upcoming schedule</h2>
+        <div class="chips" id="filters" role="group" aria-label="Filter by type">
+          <button class="chip is-active" data-filter="All">All</button>
+          <button class="chip" data-filter="Club meeting">Clubs</button>
+          <button class="chip" data-filter="Assembly">Assemblies</button>
+          <button class="chip" data-filter="School event">Events</button>
+        </div>
+      </div>
+      <div id="schedule-list"></div>
+    </section>
+  </main>
+
+  <script>
+    // ---------- Bookings (this will come from Google Sheets later) ----------
+
+    function daysFromNow(n) {
+      const d = new Date();
+      d.setDate(d.getDate() + n);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    const bookings = [];
+
+    // ---------- Helpers ----------
+    const $ = (id) => document.getElementById(id);
+
+    function formatTime(t) {
+      const [h, m] = t.split(":").map(Number);
+      return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
+    }
+
+    function formatDay(iso) {
+      const d = new Date(iso + "T00:00:00");
+      return d.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
+    }
+
+    function esc(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML.replace(/"/g, "&quot;");
+    }
+
+    // Match locations ignoring capitals and extra spaces ("room 201" = "Room  201")
+    const normRoom = (r) => r.trim().toLowerCase().replace(/\s+/g, " ");
+    const sameRoom = (a, b) => normRoom(a) === normRoom(b);
+
+    // ---------- Tabs ----------
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle("is-active", on);
+          t.setAttribute("aria-selected", on);
+        });
+        document.querySelectorAll(".view").forEach((v) => v.classList.remove("is-active"));
+        $("view-" + tab.dataset.view).classList.add("is-active");
+      });
+    });
+
+    // ---------- Booking form ----------
+    // Suggest locations people have already used, so spellings stay consistent
+    function updateRoomList() {
+      const seen = new Map();
+      bookings.forEach((b) => { if (!seen.has(normRoom(b.room))) seen.set(normRoom(b.room), b.room); });
+      $("room-list").innerHTML = [...seen.values()].sort().map((r) => `<option value="${esc(r)}">`).join("");
+    }
+    updateRoomList();
+    $("date").min = daysFromNow(0);
+
+    $("date").addEventListener("change", (e) => {
+      const isWednesday = e.target.value && new Date(e.target.value + "T00:00:00").getDay() === 3;
+      $("eagle-hint").hidden = !isWednesday;
+    });
+
+    function showStatus(html, kind) {
+      const box = $("form-status");
+      box.innerHTML = html;
+      box.className = "status " + kind;
+      box.hidden = false;
+    }
+
+    // Two meetings overlap if each one starts before the other ends.
+    // Back-to-back (one ends exactly when the next starts) is allowed.
+    function overlaps(aStart, aEnd, bStart, bEnd) {
+      return aStart < bEnd && bStart < aEnd;
+    }
+
+    function readForm() {
+      return {
+        name: $("name").value.trim(),
+        type: $("type").value,
+        date: $("date").value,
+        start: $("start").value,
+        end: $("end").value,
+        room: $("room").value.trim().replace(/\s+/g, " "),
+        organizer: $("organizer").value.trim(),
+        notes: $("notes").value.trim(),
+      };
+    }
+
+    function validateForm() {
+      const required = ["name", "type", "date", "start", "end", "room", "organizer"];
+      let missing = false;
+      required.forEach((id) => {
+        const empty = !$(id).value.trim();
+        $(id).classList.toggle("invalid", empty);
+        if (empty) missing = true;
+      });
+      if (missing) {
+        showStatus("Fill in the highlighted fields to continue.", "error");
+        return false;
+      }
+      if ($("end").value <= $("start").value) {
+        $("end").classList.add("invalid");
+        showStatus("End time must be after the start time.", "error");
+        return false;
+      }
+      return true;
+    }
+
+    function findConflicts(d) {
+      return bookings.filter((b) => b.date === d.date && sameRoom(b.room, d.room) && overlaps(d.start, d.end, b.start, b.end));
+    }
+
+    let checkId = 0; // lets us ignore a check if the form changed while it was loading
+
+    function setIdle() {
+      const btn = $("check-btn");
+      btn.hidden = false;
+      btn.disabled = false;
+      btn.classList.remove("loading");
+      btn.textContent = "Check availability";
+      $("book-btn").hidden = true;
+    }
+
+    function showConflict(d) {
+      const taken = findConflicts(d).map((c) =>
+        `<li><strong>${esc(c.name)}</strong> has ${esc(c.room)} from ${formatTime(c.start)} to ${formatTime(c.end)}</li>`).join("");
+      showStatus(`<strong>Bad news. That room is already booked.</strong><ul>${taken}</ul><p>Try a different room or time.</p>`, "error");
+    }
+
+    // Any other meeting that overlaps even a little (it has to be in another room, or it would be a conflict)
+    function headsUp(d) {
+      const near = bookings.filter((b) => b.date === d.date && overlaps(d.start, d.end, b.start, b.end));
+      if (!near.length) return "";
+      const items = near.map((b) =>
+        `<li><strong>${esc(b.name)}</strong> (${esc(b.room)}) meets ${formatTime(b.start)} to ${formatTime(b.end)}</li>`).join("");
+      return `<div class="note">Just so you know, ${near.length === 1 ? "another meeting is" : "other meetings are"} happening at the same time:<ul>${items}</ul></div>`;
+    }
+
+    function checkAvailability() {
+      if (!validateForm()) return;
+      const d = readForm();
+      const btn = $("check-btn");
+      const myCheck = ++checkId;
+
+      $("form-status").hidden = true;
+      btn.disabled = true;
+      btn.classList.add("loading");
+      btn.textContent = "Checking availability...";
+
+      // The short delay stands in for the real wait once this talks to Google Sheets.
+      setTimeout(() => {
+        if (myCheck !== checkId) return;
+        setIdle();
+        if (findConflicts(d).length) return showConflict(d);
+
+        showStatus(`<strong>Good news!</strong> ${esc(d.room)} is available on ${formatDay(d.date)} from ${formatTime(d.start)} to ${formatTime(d.end)}.${headsUp(d)}`, "ok");
+        btn.hidden = true;
+        $("book-btn").hidden = false;
+      }, 900);
+    }
+
+    function bookNow() {
+      const d = readForm();
+      if (findConflicts(d).length) { setIdle(); return showConflict(d); }
+
+      const note = headsUp(d);
+      bookings.push(d);
+      renderSchedule();
+      updateRoomList();
+      $("booking-form").reset();
+      $("eagle-hint").hidden = true;
+      setIdle();
+      showStatus(
+        `<strong>You're booked!</strong> ${esc(d.name)} has ${esc(d.room)} on ${formatDay(d.date)}, ${formatTime(d.start)} to ${formatTime(d.end)}. ` +
+        `<button type="button" class="link" id="go-schedule">View schedule</button>${note}`, "ok");
+    }
+
+    $("booking-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      checkAvailability();
+    });
+    $("book-btn").addEventListener("click", bookNow);
+
+    // Take people to the schedule from the success message
+    $("form-status").addEventListener("click", (e) => {
+      if (e.target.id === "go-schedule") document.querySelector('.tab[data-view="schedule"]').click();
+    });
+
+    // Editing the form makes any earlier result out of date, so start over
+    ["input", "change"].forEach((evt) =>
+      $("booking-form").addEventListener(evt, (e) => {
+        e.target.classList.remove("invalid");
+        $("form-status").hidden = true;
+        checkId++;
+        setIdle();
+      }));
+
+    // ---------- Schedule ----------
+    let activeFilter = "All";
+
+    const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+
+    // Group a day's meetings (sorted by start) into clusters of meetings that overlap in time.
+    function clusterMeetings(day) {
+      const clusters = [];
+      let cur = null, curEnd = -1;
+      day.forEach((b) => {
+        if (cur && toMin(b.start) < curEnd) { cur.push(b); curEnd = Math.max(curEnd, toMin(b.end)); }
+        else { cur = [b]; clusters.push(cur); curEnd = toMin(b.end); }
+      });
+      return clusters;
+    }
+
+    function meetingCard(b) {
+      return `
+    <article class="meeting" data-type="${esc(b.type)}">
+      <div class="time">${formatTime(b.start)} – ${formatTime(b.end)}</div>
+      <div>
+        <div class="title">${esc(b.name)}</div>
+        <div class="meta">${esc(b.type)} · ${esc(b.organizer)}</div>
+        ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
+      </div>
+      <span class="room">${esc(b.room)}</span>
+    </article>`;
+    }
+
+    function clusterCard(group) {
+      const same = group.every((b) => b.start === group[0].start && b.end === group[0].end);
+      const cols = group.map((b) => `
+      <div class="col" data-type="${esc(b.type)}">
+        <div class="time">${formatTime(b.start)} – ${formatTime(b.end)}</div>
+        <div class="title">${esc(b.name)}</div>
+        <div class="meta">${esc(b.type)} · ${esc(b.organizer)}</div>
+        ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
+        <span class="room">${esc(b.room)}</span>
+      </div>`).join("");
+
+      return `
+    <div class="cluster">
+      <div class="cluster-head"><strong>${same ? "Same time" : "Overlap"}</strong> <span>· ${group.length} meetings</span></div>
+      <div class="cols">${cols}</div>
+    </div>`;
+    }
+
+    function renderSchedule() {
+      const list = $("schedule-list");
+      const items = bookings
+        .filter((b) => b.date >= daysFromNow(0))
+        .filter((b) => activeFilter === "All" || b.type === activeFilter)
+        .sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+
+      if (!items.length) {
+        list.innerHTML = '<p class="empty">No upcoming meetings yet. Be the first to book a room!</p>';
+        return;
+      }
+
+      const byDay = {};
+      items.forEach((b) => (byDay[b.date] = byDay[b.date] || []).push(b));
+
+      list.innerHTML = Object.entries(byDay).map(([date, day]) => {
+        const isWed = new Date(date + "T00:00:00").getDay() === 3;
+        const cards = clusterMeetings(day).map((g) => (g.length === 1 ? meetingCard(g[0]) : clusterCard(g))).join("");
+        return `
+      <div class="day">
+        <h3>${formatDay(date)} ${isWed ? '<span class="day-tag">Eagle\'s Day</span>' : ""}</h3>
+        ${cards}
+      </div>`;
+      }).join("");
+    }
+
+    $("filters").addEventListener("click", (e) => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      activeFilter = chip.dataset.filter;
+      document.querySelectorAll(".chip").forEach((c) => c.classList.toggle("is-active", c === chip));
+      renderSchedule();
+    });
+
+    renderSchedule();
+  </script>
+</body>
+
+</html>
