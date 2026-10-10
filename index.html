@@ -402,7 +402,7 @@
 
     .meeting {
       display: grid;
-      grid-template-columns: 130px 1fr auto;
+      grid-template-columns: 190px minmax(0, 1fr) auto;
       gap: 16px;
       align-items: center;
       background: var(--card);
@@ -571,6 +571,667 @@
         grid-column: 1 / -1;
       }
     }
+
+
+    /* Meeting updated success popup */
+    .success-dialog {
+      width: min(440px, calc(100vw - 28px));
+      max-height: calc(100dvh - 28px);
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 0;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 25px 80px rgba(11, 27, 58, .24);
+    }
+
+    .success-dialog::backdrop {
+      background: rgba(11, 27, 58, .55);
+    }
+
+    .success-inner {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      border-radius: 50%;
+    }
+
+    .success-inner h2 {
+      font: 700 1.45rem var(--head);
+      color: var(--navy);
+      text-align: center;
+    }
+
+    .success-description {
+      color: var(--muted);
+      font: 500 .92rem var(--body);
+      text-align: center;
+      margin: 0;
+    }
+
+    .success-details {
+      width: 100%;
+      background: #f7faff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .success-details strong {
+      display: block;
+      font: 700 1rem var(--head);
+      color: var(--navy);
+      margin-bottom: 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .success-detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font: 500 .9rem var(--body);
+    }
+
+    .success-detail-row svg {
+      flex-shrink: 0;
+      width: 17px;
+      height: 17px;
+      margin-top: 2px;
+    }
+
+    .success-email {
+      color: var(--muted);
+      font: 500 .82rem var(--body);
+      text-align: center;
+      margin: 0;
+    }
+
+    .success-email svg {
+      width: 16px;
+      height: 16px;
+      vertical-align: -3px;
+      margin-right: 4px;
+      color: var(--accent-dark);
+    }
+
+    .success-button {
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--btn-dark);
+      color: white;
+      font: 800 .95rem var(--body);
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .success-button:hover {
+      background: var(--navy);
+    }
+
+    .success-button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .meeting .time {
+      white-space: nowrap;
+    }
+
+
+    /* Custom cancellation confirmation */
+
+    .cancel-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fdecee;
+      color: #d64550;
+      border-radius: 50%;
+    }
+
+    .cancel-actions {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cancel-back-btn,
+    .cancel-confirm-btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 8px;
+      font: 800 .9rem var(--body);
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .cancel-back-btn {
+      background: var(--paper);
+      color: var(--navy);
+    }
+
+    .cancel-back-btn:hover {
+      background: #dce6f4;
+    }
+
+    .cancel-confirm-btn {
+      background: var(--coral);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .cancel-confirm-btn:hover {
+      background: #c5323a;
+    }
+
+    .cancel-confirm-btn:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .cancel-back-btn:focus-visible,
+    .cancel-confirm-btn:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+
+    /* Smooth popup button interactions */
+    .success-button,
+    .cancel-back-btn,
+    .cancel-confirm-btn {
+      transition:
+        background-color .22s ease,
+        color .22s ease,
+        transform .22s ease,
+        box-shadow .22s ease;
+    }
+
+    .success-button:hover:not(:disabled) {
+      background: var(--navy);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(11, 27, 58, .18);
+    }
+
+    .cancel-back-btn:hover:not(:disabled) {
+      background: #dce6f4;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(11, 27, 58, .1);
+    }
+
+    .cancel-confirm-btn:hover:not(:disabled) {
+      background: #c5323a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(229, 72, 77, .2);
+    }
+
+    .success-button:active,
+    .cancel-back-btn:active,
+    .cancel-confirm-btn:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .success-button,
+      .cancel-back-btn,
+      .cancel-confirm-btn {
+        transition: none;
+      }
+    }
+
+
+
+    /* Consistent interactive hover states for management controls */
+    .manage-close,
+    .manage-verify,
+    .manage-edit,
+    .manage-cancel,
+    .manage-back {
+      cursor: pointer;
+      transition: background-color .22s ease, color .22s ease,
+        border-color .22s ease, transform .22s ease,
+        box-shadow .22s ease;
+    }
+
+    .manage-close:hover:not(:disabled) {
+      background: #dce6f4;
+      color: var(--navy);
+      transform: translateY(-2px);
+    }
+
+    .manage-verify:hover:not(:disabled),
+    .manage-edit:hover:not(:disabled) {
+      background: var(--navy);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(11, 27, 58, .18);
+    }
+
+    .manage-cancel:hover:not(:disabled) {
+      background: #fde3e5;
+      border-color: var(--coral);
+      color: #a3212b;
+      transform: translateY(-2px);
+    }
+
+    .manage-back:hover:not(:disabled) {
+      background: var(--paper);
+      transform: translateY(-2px);
+    }
+
+    .manage-close:active,
+    .manage-verify:active,
+    .manage-edit:active,
+    .manage-cancel:active,
+    .manage-back:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .manage-close,
+      .manage-verify,
+      .manage-edit,
+      .manage-cancel,
+      .manage-back {
+        transition: none;
+      }
+    }
+
+    /* Compact manage control for single and overlapping meetings */
+    .meeting {
+      position: relative;
+      padding-right: 62px;
+    }
+
+    .col {
+      position: relative;
+      padding-right: 56px;
+    }
+
+    .manage-icon {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s;
+    }
+
+    .manage-icon:hover {
+      background: #e8f3ff;
+      color: #2067ac;
+      border-color: #c8dfff;
+    }
+
+    .manage-icon:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .manage-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    /* Manage meeting dialog */
+    .manage-dialog {
+      width: min(440px, calc(100vw - 28px));
+      max-height: calc(100dvh - 28px);
+      overflow: auto;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      color: var(--ink);
+      background: var(--card);
+      box-shadow: 0 25px 80px rgba(11, 27, 58, .24);
+    }
+
+    .manage-dialog::backdrop {
+      background: rgba(11, 27, 58, .55);
+    }
+
+    .manage-inner {
+      padding: 26px;
+    }
+
+    .manage-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .manage-top h2 {
+      font-size: 1.45rem;
+    }
+
+    .manage-close {
+      border: 0;
+      background: #eef3fa;
+      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      font: 800 1.25rem var(--body);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .manage-summary {
+      margin: 18px 0;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #f7faff;
+    }
+
+    .manage-summary strong {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .manage-summary p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .manage-description {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .manage-dialog label {
+      margin-bottom: 12px;
+    }
+
+    .manage-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .manage-actions button {
+      flex: 1;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: 800 .9rem var(--body);
+    }
+
+    .manage-actions button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    .manage-edit {
+      border: 0;
+      color: white;
+      background: var(--btn-dark);
+    }
+
+    .manage-cancel {
+      border: 1px solid #e9b9bd;
+      color: #a3212b;
+      background: #fff3f4;
+    }
+
+    .manage-message {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .manage-message.error {
+      color: #a3212b;
+    }
+
+    .manage-message.ok {
+      color: var(--accent-dark);
+    }
+
+    .manage-verify {
+      width: 100%;
+      padding: 11px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--btn-dark);
+      color: white;
+      font: 800 .95rem var(--body);
+      cursor: pointer;
+    }
+
+    .manage-verify:disabled,
+    .manage-actions button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .manage-edit-form {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .manage-edit-form label {
+      margin: 0;
+    }
+
+    .manage-edit-form .row {
+      gap: 10px;
+    }
+
+    .manage-edit-form input,
+    .manage-edit-form select,
+    .manage-edit-form textarea {
+      padding: 9px 11px;
+    }
+
+    .manage-back {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      font: 800 .9rem var(--body);
+      cursor: pointer;
+    }
+
+    .manage-edit-form .manage-save {
+      margin-top: 4px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 600px) {
+      .col {
+        padding-right: 45px;
+      }
+
+      .col .manage-icon {
+        top: 9px;
+        right: 7px;
+        width: 32px;
+        height: 32px;
+      }
+
+      .meeting {
+        padding-right: 56px;
+      }
+    }
+
+    /* Calendar loading illustration */
+    .schedule-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 42px 16px;
+      text-align: center;
+      color: var(--navy)
+    }
+
+    .schedule-loading strong {
+      font: 700 1.08rem var(--head)
+    }
+
+    .schedule-loading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    .loading-calendar {
+      width: 94px;
+      height: 94px;
+      animation: calendar-float 2s ease-in-out infinite
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 7px;
+      margin-top: 5px
+    }
+
+    .loading-dots span {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: dot-pulse 1.2s ease-in-out infinite
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: .2s
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: .4s
+    }
+
+    @keyframes calendar-float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-6px)
+      }
+    }
+
+    @keyframes dot-pulse {
+
+      0%,
+      80%,
+      100% {
+        opacity: .3;
+        transform: scale(.75)
+      }
+
+      40% {
+        opacity: 1;
+        transform: scale(1)
+      }
+    }
+
+    .cancelled-success-icon {
+      background: #fdecee;
+      color: #d64550
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      .loading-calendar,
+      .loading-dots span {
+        animation: none
+      }
+    }
+
+    /* One-click management-code recovery */
+    .forgot-code-link {
+      display: block;
+      margin: 12px auto 0;
+      padding: 5px 10px;
+      border: 0;
+      background: none;
+      color: var(--btn-dark);
+      font: 800 .88rem var(--body);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color .2s ease, transform .2s ease;
+    }
+
+    .forgot-code-link:hover:not(:disabled) {
+      color: var(--navy);
+      transform: translateY(-1px);
+    }
+
+    .forgot-code-link:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .forgot-code-link:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .recovery-dialog {
+      width: min(420px, calc(100vw - 28px));
+      border: 0;
+      border-radius: 22px;
+      padding: 0;
+      box-shadow: 0 25px 80px rgba(11, 27, 58, .24);
+    }
+
+    .recovery-dialog::backdrop {
+      background: rgba(11, 27, 58, .55);
+    }
+
+    .recovery-dialog .success-inner {
+      padding: 28px;
+    }
+
+    .recovery-dialog .success-button:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
   </style>
 </head>
 
@@ -672,6 +1333,243 @@
       <div id="schedule-list"></div>
     </section>
   </main>
+
+
+  <!-- Meeting management: requires server-side code verification. -->
+  <dialog id="manage-dialog" class="manage-dialog" aria-labelledby="manage-title">
+    <div class="manage-inner">
+      <div class="manage-top">
+        <h2 id="manage-title">Manage meeting</h2>
+        <button type="button" class="manage-close" id="manage-close" aria-label="Close">×</button>
+      </div>
+      <div id="manage-summary" class="manage-summary"></div>
+      <div id="manage-auth">
+        <p class="manage-description">Enter the management code from your confirmation email to edit or cancel this
+          booking.</p>
+        <label for="manage-code">Management code
+          <input id="manage-code" type="password" inputmode="numeric" autocomplete="off" maxlength="6"
+            placeholder="6-digit code">
+        </label>
+        <button type="button" id="manage-verify" class="manage-verify">Verify code</button>
+        <button type="button" id="forgot-code" class="forgot-code-link">Forgot your code?</button>
+      </div>
+      <div id="manage-options" hidden>
+        <p class="manage-description">Verified! What would you like to do?</p>
+        <div class="manage-actions">
+          <button type="button" class="manage-edit" id="manage-edit">Edit meeting</button>
+          <button type="button" class="manage-cancel" id="manage-cancel">Cancel meeting</button>
+        </div>
+      </div>
+      <form id="manage-edit-form" class="manage-edit-form" hidden>
+        <label>Meeting name<input id="edit-name" required maxlength="150"></label>
+        <label>Meeting type<select id="edit-type" required>
+            <option>Club meeting</option>
+            <option>Assembly</option>
+            <option>School event</option>
+            <option>Other</option>
+          </select></label>
+        <label>Date<input id="edit-date" type="date" required></label>
+        <div class="row">
+          <label>Start time<input id="edit-start" type="time" required></label>
+          <label>End time<input id="edit-end" type="time" required></label>
+        </div>
+        <label>Room or location<input id="edit-room" required></label>
+        <label>Organizer<input id="edit-organizer" required></label>
+        <label>Notes (optional)<textarea id="edit-notes" rows="2"></textarea></label>
+        <div class="manage-actions">
+          <button type="button" id="manage-back" class="manage-back">Back</button>
+          <button type="submit" id="manage-save" class="manage-edit">Save changes</button>
+        </div>
+      </form>
+      <p class="manage-message" id="manage-message" role="status" aria-live="polite"></p>
+    </div>
+  </dialog>
+
+
+  <!-- Meeting updated success popup -->
+  <dialog id="success-dialog" class="success-dialog" aria-labelledby="success-title">
+    <div class="success-inner">
+      <div class="success-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M16 3v4M8 3v4M3 10h18" />
+          <path d="m9 16 2 2 4-4" />
+        </svg>
+      </div>
+      <h2 id="success-title">Meeting updated!</h2>
+      <p class="success-description">
+        Your changes have been saved successfully.
+        Here are your updated meeting details.
+      </p>
+      <div class="success-details">
+        <strong id="success-name"></strong>
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 10h18" />
+          </svg>
+          <span id="success-date"></span>
+        </div>
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <span id="success-time"></span>
+        </div>
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          <span id="success-room"></span>
+        </div>
+      </div>
+      <p id="success-email" class="success-email"></p>
+      <button type="button" id="success-close" class="success-button">
+        Back to schedule &rarr;
+      </button>
+    </div>
+  </dialog>
+
+
+  <!-- Custom cancellation confirmation -->
+  <dialog id="cancel-dialog" class="success-dialog" aria-labelledby="cancel-title">
+
+    <div class="success-inner">
+
+      <div class="cancel-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M16 3v4M8 3v4M3 10h18" />
+          <path d="m9 13 6 6m0-6-6 6" />
+        </svg>
+      </div>
+
+      <h2 id="cancel-title">Cancel this meeting?</h2>
+
+      <p class="success-description">
+        Are you sure you want to cancel this booking?
+        This action cannot be undone.
+      </p>
+
+      <div class="success-details">
+
+        <strong id="cancel-name"></strong>
+
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 10h18" />
+          </svg>
+          <span id="cancel-date"></span>
+        </div>
+
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <span id="cancel-time"></span>
+        </div>
+
+        <div class="success-detail-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          <span id="cancel-room"></span>
+        </div>
+
+      </div>
+
+      <p id="cancel-error" class="success-email" role="alert" hidden></p>
+
+      <div class="cancel-actions">
+        <button type="button" id="cancel-back" class="cancel-back-btn">
+          Keep meeting
+        </button>
+
+        <button type="button" id="cancel-confirm" class="cancel-confirm-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M8 6V4h8v2M5 6l1 14h12l1-14" />
+            <path d="M10 10v7M14 10v7" />
+          </svg>
+          Yes, cancel
+        </button>
+      </div>
+
+    </div>
+  </dialog>
+
+
+
+  <!-- Confirmation after a booking has been cancelled -->
+  <dialog id="cancelled-success-dialog" class="success-dialog" aria-labelledby="cancelled-success-title">
+    <div class="success-inner">
+      <div class="success-icon cancelled-success-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M16 3v4M8 3v4M3 10h18" />
+          <path d="m9 13 6 6m0-6-6 6" />
+        </svg>
+      </div>
+      <h2 id="cancelled-success-title">Meeting cancelled!</h2>
+      <p class="success-description">Your meeting has been cancelled successfully and removed from the active schedule.
+      </p>
+      <div class="success-details">
+        <strong id="cancelled-success-name"></strong>
+        <div class="success-detail-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 10h18" />
+          </svg><span id="cancelled-success-date"></span></div>
+        <div class="success-detail-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg><span id="cancelled-success-time"></span></div>
+        <div class="success-detail-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg><span id="cancelled-success-room"></span></div>
+      </div>
+      <p id="cancelled-success-email" class="success-email" role="status"></p>
+      <button type="button" id="cancelled-success-close" class="success-button">Back to schedule &rarr;</button>
+    </div>
+  </dialog>
+
+
+  <!-- Code recovery: email is looked up on the server, never entered or displayed here. -->
+  <dialog id="recovery-dialog" class="recovery-dialog" aria-labelledby="recovery-title">
+    <div class="success-inner">
+      <div class="success-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2" />
+          <path d="M16 3v4M8 3v4M3 10h18" />
+          <path d="m9 16 2 2 4-4" />
+        </svg>
+      </div>
+      <h2 id="recovery-title">Recover your code</h2>
+      <p class="success-description" id="recovery-description">We'll send the management code to the email address
+        originally used for this booking.</p>
+      <p class="success-email" id="recovery-message" role="status" aria-live="polite"></p>
+      <button type="button" id="recovery-send" class="success-button">Send my code</button>
+      <button type="button" id="recovery-close" class="forgot-code-link">Back to verification</button>
+    </div>
+  </dialog>
 
   <script>
     // ---------- Bookings (this will come from Google Sheets later) ----------
@@ -1069,6 +1967,17 @@
       return clusters;
     }
 
+    function manageButton(b) {
+      // Only the public booking ID is included; management codes are never rendered.
+      return `<button type="button" class="manage-icon" data-manage-id="${esc(b.id)}"
+        aria-label="Manage ${esc(b.name)}" title="Manage meeting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/>
+        </svg>
+      </button>`;
+    }
+
     function meetingCard(b) {
       return `
     <article class="meeting" data-type="${esc(b.type)}">
@@ -1079,6 +1988,7 @@
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
       </div>
       <span class="room">${esc(b.room)}</span>
+      ${manageButton(b)}
     </article>`;
     }
 
@@ -1091,6 +2001,7 @@
         <div class="meta">${esc(b.type)} · ${esc(b.organizer)}</div>
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
         <span class="room">${esc(b.room)}</span>
+        ${manageButton(b)}
       </div>`).join("");
 
       return `
@@ -1134,11 +2045,354 @@
       renderSchedule();
     });
 
+    function showCancelConfirmation() {
+      if (!verifiedBooking || !selectedBookingId || !verifiedCode) return;
+
+      $("cancel-name").textContent = verifiedBooking.name;
+      $("cancel-date").textContent = formatDay(verifiedBooking.date);
+      $("cancel-time").textContent =
+        formatTime(verifiedBooking.start) + " – " + formatTime(verifiedBooking.end);
+      $("cancel-room").textContent = verifiedBooking.room;
+      $("cancel-error").hidden = true;
+
+      // Close the management dialog so only one modal is active.
+      manageDialog.close();
+      $("cancel-dialog").showModal();
+    }
+
+    $("cancel-back").addEventListener("click", () => {
+      $("cancel-dialog").close();
+      manageDialog.showModal();
+    });
+
+    $("cancel-dialog").addEventListener("cancel", event => {
+      if ($("cancel-confirm").disabled) event.preventDefault();
+      else {
+        // Restore the management options when Escape is pressed.
+        requestAnimationFrame(() => manageDialog.showModal());
+      }
+    });
+
+    $("cancel-confirm").addEventListener("click", async () => {
+      const btn = $("cancel-confirm");
+      if (btn.disabled || !selectedBookingId || !verifiedCode) return;
+      const originalContent = btn.innerHTML;
+      btn.disabled = true;
+      btn.textContent = "Cancelling...";
+      $("cancel-error").hidden = true;
+
+      try {
+        const result = await manageRequest({
+          action: "cancelBooking",
+          bookingId: selectedBookingId,
+          managementCode: verifiedCode
+        });
+        if (!result.success) {
+          const message = result.message || "Cancellation failed.";
+          if (/no longer active|already cancel|already inactive/i.test(message)) {
+            // The booking was cancelled earlier (or by another session).
+            // Do not show a new cancellation-success message for this request.
+            $("cancel-dialog").close();
+            verifiedCode = null;
+            verifiedBooking = null;
+            selectedBookingId = null;
+            await loadBookings();
+            document.querySelector('.tab[data-view="schedule"]').click();
+            return;
+          }
+          throw new Error(message);
+        }
+
+        // Keep the verified details before clearing management state.
+        const cancelledBooking = { ...verifiedBooking };
+        $("cancel-dialog").close();
+        verifiedCode = null;
+        verifiedBooking = null;
+        selectedBookingId = null;
+        const refreshed = await loadBookings();
+        showCancelledSuccess(cancelledBooking, result.emailSent, refreshed);
+      } catch (error) {
+        console.error("Cancellation error:", error);
+        $("cancel-error").textContent = error.message || "Could not cancel the meeting. Please try again.";
+        $("cancel-error").hidden = false;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalContent;
+      }
+    });
+
+
+
+    function showCancelledSuccess(booking, emailSent, refreshed) {
+      $("cancelled-success-name").textContent = booking.name;
+      $("cancelled-success-date").textContent = formatDay(booking.date);
+      $("cancelled-success-time").textContent = formatTime(booking.start) + " – " + formatTime(booking.end);
+      $("cancelled-success-room").textContent = booking.room;
+      const emailMessage = emailSent
+        ? "✓ A cancellation confirmation email was sent."
+        : "Your meeting was cancelled, but the confirmation email could not be sent.";
+      $("cancelled-success-email").textContent = emailMessage +
+        (refreshed ? "" : " Please refresh the schedule to see the latest changes.");
+      $("cancelled-success-dialog").showModal();
+    }
+
+    $("cancelled-success-close").addEventListener("click", () => {
+      $("cancelled-success-dialog").close();
+      document.querySelector('.tab[data-view="schedule"]').click();
+    });
+
+    function scheduleLoadingMarkup() {
+      return `<div class="schedule-loading" role="status" aria-live="polite">
+        <svg class="loading-calendar" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+          <rect x="18" y="19" width="64" height="65" rx="12" fill="white" stroke="#D3DDED" stroke-width="2"/>
+          <path d="M18 32Q18 19 30 19H70Q82 19 82 32V39H18Z" fill="#0B1B3A"/>
+          <path d="M36 14V26M64 14V26" stroke="#14B8A6" stroke-width="6" stroke-linecap="round"/>
+          <g fill="#DDE9F3"><rect x="28" y="48" width="10" height="6" rx="2"/><rect x="44" y="48" width="10" height="6" rx="2"/><rect x="60" y="48" width="10" height="6" rx="2"/><rect x="28" y="59" width="10" height="6" rx="2"/><rect x="60" y="59" width="10" height="6" rx="2"/><rect x="28" y="70" width="10" height="6" rx="2"/><rect x="44" y="70" width="10" height="6" rx="2"/></g>
+          <rect x="44" y="59" width="10" height="6" rx="2" fill="#14B8A6"/>
+          <circle cx="74" cy="77" r="17" fill="#14B8A6" stroke="white" stroke-width="3"/>
+          <path d="M67 77L72 82L81 71" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <strong>Getting your schedule ready...</strong>
+        <p>Just a moment while we fetch your meetings</p>
+        <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>`;
+    }
+
+    function showUpdateSuccess(booking, emailSent, refreshed) {
+
+      $("success-name").textContent = booking.name;
+
+      $("success-date").textContent =
+        formatDay(booking.date);
+
+      $("success-time").textContent =
+        formatTime(booking.start) + " – " +
+        formatTime(booking.end);
+
+      $("success-room").textContent = booking.room;
+
+      let message = "";
+
+      if (emailSent) {
+        message = "✓ A confirmation email was sent.";
+      } else {
+        message = "Your meeting was saved, but the confirmation email could not be sent.";
+      }
+
+      if (!refreshed) {
+        message += " Please refresh the schedule to see the latest changes.";
+      }
+
+      $("success-email").textContent = message;
+
+      $("success-dialog").showModal();
+    }
+
+    $("success-close").addEventListener("click", () => {
+      $("success-dialog").close();
+
+      document.querySelector(
+        '.tab[data-view="schedule"]'
+      ).click();
+    });
+
+
+
+    // ---------- Manage existing bookings ----------
+    const manageDialog = $("manage-dialog");
+    let selectedBookingId = null;
+    let verifiedCode = null;
+    let verifiedBooking = null;
+    let manageBusy = false;
+
+    function manageMessage(message, kind = "") {
+      const el = $("manage-message");
+      el.textContent = message;
+      el.className = "manage-message " + kind;
+    }
+
+    function manageStage(stage) {
+      $("manage-auth").hidden = stage !== "auth";
+      $("manage-options").hidden = stage !== "options";
+      $("manage-edit-form").hidden = stage !== "edit";
+    }
+
+    async function manageRequest(payload) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("Server returned " + response.status);
+      const raw = await response.text();
+      if (!raw.trim()) throw new Error("The server returned an empty response.");
+      return JSON.parse(raw);
+    }
+
+    $("schedule-list").addEventListener("click", (event) => {
+      const button = event.target.closest(".manage-icon");
+      if (!button) return;
+      const booking = bookings.find(b => String(b.id) === button.dataset.manageId);
+      if (!booking) return;
+      selectedBookingId = String(booking.id);
+      verifiedCode = null;
+      verifiedBooking = null;
+      $("manage-code").value = "";
+      manageStage("auth");
+      manageMessage("");
+      $("manage-summary").innerHTML = `
+        <strong>${esc(booking.name)}</strong>
+        <p>${formatDay(booking.date)} · ${formatTime(booking.start)}–${formatTime(booking.end)}</p>
+        <p>${esc(booking.room)} · ${esc(booking.organizer)}</p>`;
+      manageDialog.showModal();
+    });
+
+    $("manage-close").addEventListener("click", () => { if (!manageBusy) manageDialog.close(); });
+    manageDialog.addEventListener("cancel", event => { if (manageBusy) event.preventDefault(); });
+    manageDialog.addEventListener("click", event => {
+      if (event.target === manageDialog && !manageBusy) manageDialog.close();
+    });
+
+    $("manage-verify").addEventListener("click", async () => {
+      if (manageBusy) return;
+      const code = $("manage-code").value.trim();
+      if (!/^\d{6}$/.test(code)) {
+        manageMessage("Please enter your 6-digit management code.", "error");
+        return;
+      }
+      manageBusy = true;
+      $("manage-verify").disabled = true;
+      manageMessage("Verifying...");
+      try {
+        const result = await manageRequest({ action: "verifyBooking", bookingId: selectedBookingId, managementCode: code });
+        if (!result.success) {
+          manageMessage(result.message || "Unable to verify this booking.", "error");
+          return;
+        }
+        verifiedCode = code;
+        verifiedBooking = result.booking;
+        $("manage-code").value = "";
+        manageStage("options");
+        manageMessage("Management code verified.", "ok");
+      } catch (error) {
+        console.error("Verification error:", error);
+        manageMessage("Couldn't connect to the booking system. Please try again.", "error");
+      } finally {
+        manageBusy = false;
+        $("manage-verify").disabled = false;
+      }
+    });
+
+
+    // One-click recovery: the backend alone looks up the saved email and code.
+    const recoveryDialog = $("recovery-dialog");
+    $("forgot-code").addEventListener("click", () => {
+      if (!selectedBookingId || manageBusy) return;
+      $("recovery-message").textContent = "";
+      $("recovery-send").hidden = false;
+      $("recovery-send").disabled = false;
+      $("recovery-send").textContent = "Send my code";
+      recoveryDialog.showModal();
+    });
+    $("recovery-close").addEventListener("click", () => recoveryDialog.close());
+    $("recovery-send").addEventListener("click", async () => {
+      if (!selectedBookingId) return;
+      const button = $("recovery-send");
+      button.disabled = true;
+      button.textContent = "Sending...";
+      $("recovery-message").textContent = "";
+      try {
+        await manageRequest({ action: "resendManagementCode", bookingId: selectedBookingId });
+        // Same response for unknown IDs, inactive bookings, throttled requests and sent emails.
+        $("recovery-message").textContent = "If this booking is eligible, its code will be sent to the original booking email. Please check your inbox and spam folder.";
+        button.hidden = true;
+      } catch (error) {
+        console.error("Recovery request failed:", error);
+        $("recovery-message").textContent = "We couldn't reach the booking system. Please try again later.";
+        button.disabled = false;
+        button.textContent = "Try again";
+      }
+    });
+
+    $("manage-code").addEventListener("keydown", event => {
+      if (event.key === "Enter") { event.preventDefault(); $("manage-verify").click(); }
+    });
+
+    $("manage-edit").addEventListener("click", () => {
+      if (!verifiedBooking || !verifiedCode) return;
+      const b = verifiedBooking;
+      ["name", "type", "date", "start", "end", "room", "organizer", "notes"].forEach(field => {
+        $("edit-" + field).value = b[field] || "";
+      });
+      $("edit-date").min = daysFromNow(0);
+      manageStage("edit");
+      manageMessage("");
+    });
+
+    $("manage-back").addEventListener("click", () => {
+      if (!manageBusy) { manageStage("options"); manageMessage(""); }
+    });
+
+    $("manage-edit-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (manageBusy || !verifiedCode) return;
+      const updated = {};
+      ["name", "type", "date", "start", "end", "room", "organizer", "notes"].forEach(field => {
+        updated[field] = $("edit-" + field).value.trim();
+      });
+      if (["name", "type", "date", "start", "end", "room", "organizer"].some(field => !updated[field])) {
+        manageMessage("Please fill in all required fields.", "error"); return;
+      }
+      if (updated.end <= updated.start) {
+        manageMessage("End time must be after start time.", "error"); return;
+      }
+      if (updated.date < daysFromNow(0) || (updated.date === daysFromNow(0) && new Date(`${updated.date}T${updated.start}:00`) <= new Date())) {
+        manageMessage("Please choose a future meeting time.", "error"); return;
+      }
+      const localConflict = bookings.find(b => String(b.id) !== selectedBookingId && b.date === updated.date && sameRoom(b.room, updated.room) && overlaps(updated.start, updated.end, b.start, b.end));
+      if (localConflict) {
+        manageMessage(`Room unavailable: ${localConflict.name} is booked from ${formatTime(localConflict.start)} to ${formatTime(localConflict.end)}.`, "error"); return;
+      }
+      manageBusy = true;
+      $("manage-save").disabled = true;
+      manageMessage("Saving changes...");
+      try {
+        const result = await manageRequest({ action: "updateBooking", bookingId: selectedBookingId, managementCode: verifiedCode, booking: updated });
+        if (!result.success) {
+          manageMessage(result.conflict && result.meeting ? `Room unavailable: ${result.meeting.name} already has that room and time.` : (result.message || "Update failed."), "error");
+          return;
+        }
+
+        manageDialog.close();
+        verifiedCode = null;
+
+        const refreshed = await loadBookings();
+
+        showUpdateSuccess(
+          updated,
+          result.emailSent,
+          refreshed
+        );
+
+      } catch (error) {
+        console.error("Update error:", error);
+        manageMessage("Couldn't confirm the update. Check the schedule before trying again.", "error");
+      } finally {
+        manageBusy = false;
+        $("manage-save").disabled = false;
+      }
+    });
+
+    $("manage-cancel").addEventListener("click", () => {
+      if (manageBusy || !verifiedCode) return;
+      showCancelConfirmation();
+    });
+
     async function loadBookings() {
       const list = $("schedule-list");
 
       if (bookings.length === 0) {
-        list.innerHTML = '<p class="empty">Loading meetings...</p>';
+        list.innerHTML = scheduleLoadingMarkup();
       }
 
       try {
