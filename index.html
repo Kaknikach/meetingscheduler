@@ -1232,6 +1232,216 @@
       opacity: .65;
       cursor: wait;
     }
+
+    /* Teacher access screen */
+
+    .teacher-access {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 440px;
+      padding: 24px 0;
+    }
+
+    .teacher-access-card {
+      width: min(420px, 100%);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 36px 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .teacher-access-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      display: grid;
+      place-items: center;
+    }
+
+    .teacher-access-card h2 {
+      font: 700 1.5rem var(--head);
+      color: var(--navy);
+    }
+
+    .teacher-access-card p {
+      font: 500 .95rem var(--body);
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .teacher-signin-btn {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--navy);
+      color: white;
+      font: 800 .95rem var(--body);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .teacher-signin-btn:hover:not(:disabled) {
+      background: var(--btn-dark);
+      transform: translateY(-2px);
+    }
+
+    .teacher-signin-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .teacher-access-note {
+      font: 500 .8rem var(--body);
+      color: var(--muted);
+    }
+
+    @media (max-width: 480px) {
+      .teacher-access-card {
+        padding: 28px 20px;
+      }
+    }
+
+    /* Teacher authentication feedback */
+
+    .teacher-auth-status {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font: 600 .88rem var(--body);
+      text-align: center;
+    }
+
+    .teacher-auth-status.loading {
+      background: #edf4ff;
+      color: #345a91;
+    }
+
+    .teacher-auth-status.success {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .teacher-auth-status.error {
+      background: #fdecee;
+      color: #a3212b;
+    }
+
+    .teacher-signin-btn.is-loading::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, .35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .teacher-signin-btn.is-loading::before {
+        animation: none;
+      }
+    }
+
+    /* Google Calendar reminder icon */
+    .reminder-icon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+
+      padding: 7px 10px;
+      border: 1px solid #bce9e3;
+      border-radius: 999px;
+
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+
+      font: 800 .76rem var(--body);
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+
+      transition:
+        background-color .2s ease,
+        color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .reminder-icon svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .reminder-icon:hover {
+      background: var(--accent-dark);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(11, 127, 115, .18);
+    }
+
+    .reminder-icon:active {
+      transform: scale(.97);
+    }
+
+    .reminder-icon:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* Leave space for the reminder button */
+    .meeting {
+      padding-right: 132px;
+    }
+
+    .col {
+      padding-right: 20px;
+      padding-top: 54px;
+    }
+
+    @media (max-width: 600px) {
+      .meeting {
+        padding-right: 20px;
+        padding-top: 54px;
+      }
+
+      .col {
+        padding-right: 12px;
+        padding-top: 54px;
+      }
+
+      .reminder-icon {
+        top: 10px;
+        right: 10px;
+        font-size: .72rem;
+        padding: 6px 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reminder-icon {
+        transition: none;
+      }
+    }
   </style>
 </head>
 
@@ -1244,15 +1454,51 @@
       </div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Main sections">
-      <button class="tab is-active" role="tab" aria-selected="true" data-view="book">Book a meeting</button>
-      <button class="tab" role="tab" aria-selected="false" data-view="schedule">View schedule</button>
+
+      <button class="tab is-active" role="tab" aria-selected="true" data-view="schedule">
+        View schedule
+      </button>
+      <button class="tab" role="tab" aria-selected="false" data-view="book">
+        Book a meeting
+      </button>
     </nav>
   </header>
 
   <main>
     <!-- BOOK -->
-    <section id="view-book" class="view is-active">
-      <div class="layout">
+    <section id="view-book" class="view">
+      <!-- Teacher-only access screen -->
+      <div id="teacher-access" class="teacher-access">
+        <div class="teacher-access-card">
+          <div class="teacher-access-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+          </div>
+          <h2>Teacher access</h2>
+          <p>
+            Booking and managing meetings is available
+            to authorized CIA First teachers only.
+          </p>
+
+          <!-- Teacher sign-in button -->
+          <button type="button" id="teacher-signin" class="teacher-signin-btn" disabled>
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <rect x="5" y="10" width="14" height="11" rx="2" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            Sign in with school Google
+          </button>
+          <!-- Authentication status message -->
+          <div id="teacher-auth-status" class="teacher-auth-status" role="status" aria-live="polite" hidden>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout" id="teacher-booking-content" hidden>
         <form id="booking-form" class="card" novalidate>
           <h2>Book a room</h2>
 
@@ -1298,6 +1544,12 @@
             <label>Email address
               <input type="email" id="email" placeholder="yourname@ciaschool.edu.kh" autocomplete="email" required>
             </label>
+            <label>
+              Invite teachers (Optional)
+              <textarea id="invitees" rows="3"
+                placeholder="teacher1@ciaschool.edu.kh, teacher2@ciaschool.edu.kh"></textarea>
+            </label>
+
             <label>Notes (Optional)
               <textarea id="notes" rows="3" placeholder="Anything people should know?"></textarea>
             </label>
@@ -1320,7 +1572,7 @@
     </section>
 
     <!-- SCHEDULE -->
-    <section id="view-schedule" class="view">
+    <section id="view-schedule" class="view is-active">
       <div class="schedule-head">
         <h2>Upcoming schedule</h2>
         <div class="chips" id="filters" role="group" aria-label="Filter by type">
@@ -1587,6 +1839,40 @@
     // ---------- Helpers ----------
     const $ = (id) => document.getElementById(id);
 
+    /* ---------- Teacher access interface ---------- */
+
+    let teacherAuthorized = false;
+
+    function setTeacherAuthStatus(state, message) {
+      const status = $("teacher-auth-status");
+      const button = $("teacher-signin");
+
+      status.hidden = !message;
+      status.textContent = message;
+      status.className = "teacher-auth-status " + state;
+
+      button.classList.toggle(
+        "is-loading",
+        state === "loading"
+      );
+
+      // Sign-in remains disabled until authentication is connected.
+      button.disabled = true;
+    }
+
+    function updateTeacherInterface() {
+      const accessScreen = $("teacher-access");
+      const bookingContent = $("teacher-booking-content");
+
+      // Only display booking tools after authorization.
+      accessScreen.hidden = teacherAuthorized;
+      bookingContent.hidden = !teacherAuthorized;
+
+      // Refresh the schedule so management icons match access.
+      renderSchedule();
+    }
+
+
     function formatTime(t) {
       const [h, m] = t.split(":").map(Number);
       return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
@@ -1658,6 +1944,10 @@
         room: $("room").value.trim().replace(/\s+/g, " "),
         organizer: $("organizer").value.trim(),
         email: $("email").value.trim(),
+        invitees: $("invitees").value
+          .split(",")
+          .map(email => email.trim())
+          .filter(Boolean),
         notes: $("notes").value.trim(),
       };
     }
@@ -1967,16 +2257,59 @@
       return clusters;
     }
 
-    function manageButton(b) {
-      // Only the public booking ID is included; management codes are never rendered.
-      return `<button type="button" class="manage-icon" data-manage-id="${esc(b.id)}"
-        aria-label="Manage ${esc(b.name)}" title="Manage meeting">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/>
-        </svg>
-      </button>`;
+    function googleCalendarUrl(b) {
+      // Format YYYY-MM-DD and HH:mm into Google Calendar format.
+      const formatDateTime = (date, time) =>
+        date.replace(/-/g, "") + "T" + time.replace(":", "") + "00";
+
+      const start = formatDateTime(b.date, b.start);
+      const end = formatDateTime(b.date, b.end);
+
+      const params = new URLSearchParams({
+        action: "TEMPLATE",
+        text: b.name,
+        dates: `${start}/${end}`,
+        ctz: "Asia/Phnom_Penh",
+        details: [
+          `Meeting type: ${b.type}`,
+          `Organizer: ${b.organizer}`,
+          b.notes ? `Notes: ${b.notes}` : "",
+          "Added from Eagle Bookings"
+        ].filter(Boolean).join("\n"),
+        location: b.room
+      });
+      return "https://calendar.google.com/calendar/render?" +
+        params.toString();
     }
+
+
+    function reminderButton(b) {
+      const url = googleCalendarUrl(b);
+
+      return `
+    <a href="${esc(url)}"
+       class="reminder-icon"
+       target="_blank"
+       rel="noopener noreferrer"
+       title="Add to Google Calendar"
+       aria-label="Add ${esc(b.name)} to Google Calendar">
+
+      <svg viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           aria-hidden="true">
+        <rect x="3" y="5" width="18" height="16" rx="2"/>
+        <path d="M16 3v4M8 3v4M3 10h18"/>
+        <path d="M12 13v6M9 16h6"/>
+      </svg>
+
+      <span>Remind me</span>
+    </a>`;
+    }
+
 
     function meetingCard(b) {
       return `
@@ -1988,7 +2321,7 @@
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
       </div>
       <span class="room">${esc(b.room)}</span>
-      ${manageButton(b)}
+      ${reminderButton(b)}
     </article>`;
     }
 
@@ -2001,7 +2334,7 @@
         <div class="meta">${esc(b.type)} · ${esc(b.organizer)}</div>
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
         <span class="room">${esc(b.room)}</span>
-        ${manageButton(b)}
+        ${reminderButton(b)}
       </div>`).join("");
 
       return `
@@ -2446,6 +2779,7 @@
     }
 
     loadBookings();
+    updateTeacherInterface();
   </script>
 </body>
 
