@@ -1334,6 +1334,8 @@
       background: var(--accent-soft);
       color: var(--accent-dark);
     }
+    .teacher-auth-status[hidden] { display: none !important; }
+    .teacher-auth-status { line-height: 1.55; }
 
     .teacher-auth-status.error {
       background: #fdecee;
@@ -1442,7 +1444,400 @@
         transition: none;
       }
     }
-  </style>
+
+    /* Google Sign-In */
+    .google-signin-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      overflow: hidden;
+    }
+
+    #google-signin-button {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .teacher-auth-status {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font: 600 .88rem var(--body);
+      text-align: center;
+    }
+
+    .teacher-auth-status.loading {
+      background: #edf4ff;
+      color: #345a91;
+    }
+
+    .teacher-auth-status.error {
+      background: #fdecee;
+      color: #a3212b;
+    }
+
+    .teacher-auth-status.success {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+    .teacher-auth-status[hidden] { display: none !important; }
+    .teacher-auth-status { line-height: 1.55; }
+
+    /* Teacher access denied dialog */
+    .teacher-denied-dialog {
+      width: min(420px, calc(100vw - 28px));
+      max-height: calc(100dvh - 28px);
+      overflow-y: auto;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: white;
+      color: var(--navy);
+      box-shadow: 0 25px 80px rgba(11, 27, 58, .24);
+    }
+
+    .teacher-denied-dialog::backdrop {
+      background: rgba(11, 27, 58, .55);
+    }
+
+    .teacher-denied-content {
+      padding: 32px 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .teacher-denied-icon {
+      width: 68px;
+      height: 68px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #fdecee;
+      color: #d64550;
+    }
+
+    .teacher-denied-content h2 {
+      font: 700 1.5rem var(--head);
+      color: var(--navy);
+    }
+
+    .teacher-denied-content p {
+      margin: 0;
+      font: 500 .95rem var(--body);
+      color: var(--muted);
+    }
+
+    .teacher-denied-button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--navy);
+      color: white;
+      font: 800 .95rem var(--body);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .teacher-denied-button:hover {
+      background: var(--btn-dark);
+      transform: translateY(-2px);
+    }
+
+    .teacher-denied-button:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .teacher-denied-button {
+        transition: none;
+      }
+    }
+
+    /* Signed-in layout preview: display only, never authorization */
+    .teacher-preview-banner {
+      max-width: 1000px;
+      margin: 0 auto 18px;
+      padding: 16px 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .teacher-preview-symbol {
+      display: grid;
+      place-items: center;
+      flex: 0 0 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    .teacher-preview-label {
+      display: grid;
+      flex: 1;
+      gap: 2px;
+    }
+
+    .teacher-preview-label strong {
+      font-family: var(--head);
+      color: var(--navy);
+    }
+
+    .teacher-preview-label span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    #teacher-preview-exit,
+    .preview-teacher-btn {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--navy);
+      font: 800 .85rem var(--body);
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+
+    #teacher-preview-exit:hover,
+    .preview-teacher-btn:hover {
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+    }
+
+    .preview-teacher-btn {
+      width: 100%;
+    }
+
+    .teacher-preview-disabled {
+      opacity: .75;
+    }
+
+    @media (max-width: 600px) {
+      .teacher-preview-banner {
+        flex-wrap: wrap;
+      }
+
+      #teacher-preview-exit {
+        margin-left: 58px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      #teacher-preview-exit,
+      .preview-teacher-btn {
+        transition: none;
+      }
+    }
+
+    /* Email-code login */
+    .otp-auth-form { width: 100%; display: grid; gap: 12px; text-align: left; }
+    .otp-auth-form[hidden] { display: none !important; }
+    .otp-auth-form label { color: var(--navy); }
+    .otp-auth-form input { text-align: left; }
+    .otp-primary { width: 100%; padding: 13px 16px; background: var(--navy); color: white; border: 0; border-radius: 12px; font: 800 .95rem var(--body); cursor: pointer; }
+    .otp-primary:hover:not(:disabled) { background: var(--btn-dark); }
+    .otp-primary:disabled { opacity: .65; cursor: wait; }
+    .otp-explanation { font-size: .86rem !important; text-align: center; }
+    .otp-actions { display: flex; justify-content: space-between; gap: 12px; }
+    .otp-actions button { border: 0; background: transparent; color: var(--btn-dark); font: 800 .85rem var(--body); cursor: pointer; padding: 8px 0; }
+    .otp-actions button:disabled { opacity: .5; cursor: wait; }
+    #otp-code { text-align: center; letter-spacing: .35em; font-size: 1.3rem; font-weight: 800; }
+    .otp-primary:focus-visible, .otp-actions button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  
+    /* V2 layout polish: keep room and actions aligned without overlaps. */
+    .meeting { grid-template-columns: minmax(140px, 190px) minmax(0, 1fr) auto auto; padding: 16px 20px; gap: 16px; align-items: center; }
+    .meeting > .room { justify-self: end; white-space: nowrap; }
+    .meeting-actions { display: inline-flex; gap: 10px; align-items: center; justify-content: flex-end; flex: none; white-space: nowrap; }
+    .meeting .reminder-icon, .meeting .manage-icon,
+    .col .reminder-icon, .col .manage-icon { position: static; inset: auto; transform: none; margin: 0; flex-shrink: 0; }
+    .meeting .reminder-icon, .col .reminder-icon { min-height: 38px; padding: 8px 12px; }
+    .meeting .manage-icon, .col .manage-icon { width: 38px; height: 38px; border: 1px solid #bce9e3; background: var(--accent-soft); color: var(--accent-dark); border-radius: 12px; }
+    .meeting .manage-icon:hover, .col .manage-icon:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: white; }
+    .meeting .manage-icon svg, .col .manage-icon svg { width: 18px; height: 18px; }
+    .col { padding: 16px 20px; min-width: 0; }
+    .col .meeting-actions { margin-top: 12px; justify-content: flex-start; align-self: flex-start; }
+    .col .room { margin-top: 8px; }
+    .col .time { margin-top: 2px; }
+    .col .title { margin-top: 8px; }
+    .col .meta { margin-bottom: 0; }
+    .col .notes { margin: 6px 0; }
+    /* Cluster cards: position actions on the top row, aligned with time. */
+    .cols .col { position: relative; padding-top: 16px; }
+    .cols .col > .meeting-actions {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    .cols .col > .time {
+      padding-right: 205px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+    }
+    @media (max-width: 600px) {
+      .cols .col > .meeting-actions { top: 12px; right: 12px; gap: 6px; }
+      .cols .col > .time { padding-right: 0; padding-top: 42px; }
+    }
+    @media (max-width: 900px) {
+      .meeting { grid-template-columns: minmax(110px, 155px) minmax(0, 1fr); }
+      .meeting > .room { justify-self: start; grid-column: 2; }
+      .meeting > .meeting-actions { grid-column: 2; justify-self: start; }
+    }
+    @media (max-width: 600px) {
+      .meeting { grid-template-columns: 1fr; gap: 8px; padding: 16px; }
+      .meeting > .room, .meeting > .meeting-actions { grid-column: 1; }
+      .meeting .meeting-actions { justify-self: start; }
+      .col { padding: 14px 12px; }
+      .col .meeting-actions { flex-wrap: wrap; gap: 6px; }
+      .col .reminder-icon { padding: 7px 9px; font-size: .72rem; }
+    }
+
+    .otp-inline-spinner {
+      display: inline-block;
+      width: 1.05em;
+      height: 1.05em;
+      margin-right: .65em;
+      vertical-align: -.16em;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: otp-spin .75s linear infinite;
+    }
+    @keyframes otp-spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .otp-inline-spinner { animation: none; }
+    }
+
+    /* November 2026: compact mobile layout and authentication experience */
+    @media (max-width: 600px) {
+      .teacher-access { min-height: 0; padding: 12px 0; }
+      .teacher-access-card { padding: 24px 18px; gap: 12px; border-radius: 20px; }
+      .teacher-access-icon { width: 54px; height: 54px; }
+      .teacher-access-icon svg { width: 27px; height: 27px; }
+      .teacher-access-card h2 { font-size: 1.35rem; }
+      .teacher-access-card p { font-size: .86rem; line-height: 1.45; }
+      .otp-explanation { font-size: .8rem !important; }
+      #otp-code { font-size: 1.15rem; letter-spacing: .22em; }
+      .teacher-access-note { font-size: .76rem !important; }
+
+      .teacher-preview-banner {
+        display: grid;
+        grid-template-columns: 38px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 12px;
+        border-radius: 15px;
+      }
+      .teacher-preview-symbol { width: 38px; height: 38px; flex-basis: 38px; font-size: 19px; }
+      .teacher-preview-label { min-width: 0; }
+      .teacher-preview-label strong { font-size: .9rem; }
+      .teacher-preview-label span {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: .73rem;
+      }
+      #teacher-preview-exit {
+        margin: 0;
+        padding: 8px 10px;
+        font-size: .75rem;
+        white-space: nowrap;
+      }
+
+      /* A meeting should read vertically, without detached reminder buttons. */
+      .meeting {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 10px 8px;
+        padding: 16px;
+      }
+      .meeting > .time { grid-column: 1; grid-row: 1; align-self: center; }
+      .meeting > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; min-width: 0; }
+      .meeting > .room { grid-column: 1 / -1; grid-row: 3; justify-self: start; white-space: normal; }
+      .meeting > .meeting-actions { grid-column: 2; grid-row: 1; justify-self: end; }
+
+      /* Overlapping meetings become readable stacked cards on phones. */
+      .cols { grid-template-columns: minmax(0, 1fr) !important; }
+      .cols .col, .cols .col:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 8px;
+        padding: 14px 16px;
+        border-right: 0;
+        min-width: 0;
+      }
+      .cols .col + .col { border-top: 1px solid var(--line); }
+      .cols .col > .time {
+        grid-column: 1;
+        grid-row: 1;
+        min-height: 36px;
+        padding: 0;
+        align-self: center;
+      }
+      .cols .col > .meeting-actions {
+        position: static;
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        margin: 0;
+        flex-wrap: nowrap;
+        gap: 5px;
+      }
+      .cols .col > .title,
+      .cols .col > .meta,
+      .cols .col > .notes,
+      .cols .col > .room { grid-column: 1 / -1; margin: 0; }
+      .cols .col > .room { justify-self: start; width: auto; max-width: 100%; overflow-wrap: anywhere; }
+      .meeting .reminder-icon, .col .reminder-icon {
+        min-height: 36px;
+        padding: 7px 9px;
+        font-size: .72rem;
+      }
+      .meeting .manage-icon, .col .manage-icon { width: 36px; height: 36px; }
+    }
+    @media (max-width: 390px) {
+      .meeting .reminder-icon span, .col .reminder-icon span { display: none; }
+      .meeting .reminder-icon, .col .reminder-icon { width: 36px; padding: 8px; }
+      .meeting > .time, .col > .time { font-size: .82rem; }
+    }
+
+    .otp-help { margin: 14px auto 0; max-width: 440px; padding: 13px 16px; border: 1px solid #d5e2ed; border-radius: 14px; background: #f7faff; color: #536480; font-size: .87rem; line-height: 1.5; text-align: left; }
+  .otp-help strong { color: #10213f; }
+  .otp-help p { margin: 6px 0 0; }
+  .otp-help a { color: #087f75; overflow-wrap: anywhere; }
+</style>
+
+  <!-- Email code authentication; no Google sign-in library required -->
+
 </head>
 
 <body>
@@ -1477,27 +1872,38 @@
               <path d="m9 12 2 2 4-4" />
             </svg>
           </div>
-          <h2>Teacher access</h2>
-          <p>
-            Booking and managing meetings is available
-            to authorized CIA First teachers only.
-          </p>
+          <h2>Teacher booking access</h2>
+          <p class="teacher-access-intro">Only authorized CIA First High School teachers can book meetings. Students can view the schedule without signing in.</p>
 
-          <!-- Teacher sign-in button -->
-          <button type="button" id="teacher-signin" class="teacher-signin-btn" disabled>
-            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <rect x="5" y="10" width="14" height="11" rx="2" />
-              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-            </svg>
-            Sign in with school Google
-          </button>
-          <!-- Authentication status message -->
-          <div id="teacher-auth-status" class="teacher-auth-status" role="status" aria-live="polite" hidden>
-          </div>
+          <form id="otp-email-form" class="otp-auth-form">
+            <label for="otp-email">Email address</label>
+            <input id="otp-email" type="email" autocomplete="email" placeholder="yourname@ciaschool.edu.kh" required>
+            <button class="otp-primary" type="submit" id="otp-send">Send verification code</button>
+          </form>
+          <form id="otp-code-form" class="otp-auth-form" hidden>
+            <p class="otp-explanation">Enter the six-digit code sent to your email. It expires in 10 minutes.</p>
+            <label for="otp-code">Verification code</label>
+            <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required>
+            <button class="otp-primary" type="submit" id="otp-verify">Verify &amp; Continue</button>
+            <div class="otp-actions">
+              <button type="button" id="otp-resend">Resend code</button>
+              <button type="button" id="otp-change">Change email</button>
+            </div>
+          </form>
+          <div id="teacher-auth-status" class="teacher-auth-status" role="status" aria-live="polite" hidden></div>
+          <div id="otp-help" class="otp-help" hidden><strong>Didn’t receive a code?</strong><p>Check the email spelling and Spam folder. Only approved CIA First HS teachers receive booking codes.</p><p>Students and club leaders: please ask your supervising teacher to book for you.</p><p>Need help? <a href="mailto:kaknika.chea@ciaschool.edu.kh">kaknika.chea@ciaschool.edu.kh</a></p></div>
+          <p class="teacher-access-note">Club leaders should ask their supervising teacher to book on their behalf.</p>
         </div>
       </div>
 
+      <div id="teacher-preview-banner" class="teacher-preview-banner" hidden>
+        <span class="teacher-preview-symbol">✓</span>
+        <div class="teacher-preview-label">
+          <strong id="otp-account-label">Email verified</strong>
+          <span id="otp-account-subtitle">Verified booking access</span>
+        </div>
+        <button type="button" id="teacher-preview-exit">Sign out</button>
+      </div>
       <div class="layout" id="teacher-booking-content" hidden>
         <form id="booking-form" class="card" novalidate>
           <h2>Book a room</h2>
@@ -1585,6 +1991,40 @@
       <div id="schedule-list"></div>
     </section>
   </main>
+
+  <!-- Teacher access denied popup -->
+  <dialog id="teacher-denied-dialog" class="teacher-denied-dialog" aria-labelledby="teacher-denied-title">
+
+    <div class="teacher-denied-content">
+
+      <div class="teacher-denied-icon">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="10" width="14" height="11" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+      </div>
+
+      <h2 id="teacher-denied-title">
+        Teacher access only
+      </h2>
+
+      <p>
+        Booking and managing meetings is restricted
+        to authorized CIA First teachers.
+      </p>
+
+      <p>
+        You can still view upcoming meetings
+        and add them to your Google Calendar.
+      </p>
+
+      <button type="button" id="teacher-denied-close" class="teacher-denied-button">
+        Back to schedule
+      </button>
+
+    </div>
+  </dialog>
 
 
   <!-- Meeting management: requires server-side code verification. -->
@@ -1824,7 +2264,7 @@
   </dialog>
 
   <script>
-    // ---------- Bookings (this will come from Google Sheets later) ----------
+    // ---------- Bookings (public schedule from V1; write operations locked) ----------
 
     function daysFromNow(n) {
       const d = new Date();
@@ -1832,7 +2272,10 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
     }
 
+    // V1 endpoint is PUBLIC and is used here for read-only schedule loading.
+    // Do not enable writes until the V1 deployment is secured/retired.
     const API_URL = "https://script.google.com/macros/s/AKfycbzNK-nvmvY-fKHGOeeOGDuN6Vi2EDaIJ8vgZNDk_JMuZj9Mg8wpl3PE6EI7RyEl4QqU/exec";
+    const AUTH_API_URL = "https://script.google.com/macros/s/AKfycbykiMAkBLtiV5WT9RUdWDJzVYn8OI16MwodHQrmBTgR39ibnyYxFcydMmrvDLUNNIjK/exec";
 
     let bookings = [];
 
@@ -1841,37 +2284,281 @@
 
     /* ---------- Teacher access interface ---------- */
 
+    // Never set true from browser-only email or decoded Google ID tokens.
+    // A trusted backend must verify every write request before enabling booking.
     let teacherAuthorized = false;
+    let developerVerified = false;
 
     function setTeacherAuthStatus(state, message) {
       const status = $("teacher-auth-status");
-      const button = $("teacher-signin");
-
-      status.hidden = !message;
-      status.textContent = message;
+      if (!status) return;
       status.className = "teacher-auth-status " + state;
-
-      button.classList.toggle(
-        "is-loading",
-        state === "loading"
-      );
-
-      // Sign-in remains disabled until authentication is connected.
-      button.disabled = true;
+      status.replaceChildren();
+      if (state === "loading" && message) {
+        const spinner = document.createElement("span");
+        spinner.className = "otp-inline-spinner";
+        spinner.setAttribute("aria-hidden", "true");
+        status.appendChild(spinner);
+      }
+      status.appendChild(document.createTextNode(message || ""));
+      status.hidden = !message;
     }
+
+    function friendlyOtpError(error, phase) {
+      const raw = String(error?.message || "").toLowerCase();
+      if (raw.includes("add your apps script")) {
+        return "Verification is not configured yet. Please contact the Eagle Bookings administrator.";
+      }
+      if (raw.includes("abort") || raw.includes("timeout")) {
+        return "The verification service is taking longer than expected. Please try again in a moment.";
+      }
+      if (phase === "verify") {
+        return "We couldn't verify your code. Check that it's the latest code and try again.";
+      }
+      return "We couldn't connect to the verification service right now. Please try again shortly.";
+    }
+
+
+    // The API currently returns a generic success for both approved and unapproved
+    // addresses. Only show an authorization confirmation if the backend explicitly
+    // confirms it; a generic success is NOT proof of authorization or delivery.
+    function otpRequestConfirmation(result) {
+      // Never claim authorization or delivery on the generic request response.
+      return "Check your inbox. If this is an approved teacher email, a six-digit code will arrive shortly.";
+    }
+
+    function showOtpHelp(visible) {
+      const help = document.getElementById("otp-help");
+      if (help) help.hidden = !visible;
+    }
+
+    // Keep the session within this browser tab across refreshes.
+    // Never treat stored data as proof of authorization: validate with Apps Script.
+    const OTP_SESSION_KEY = "eagleBookingsV2Session";
+    let otpSessionToken = null;
+    let otpEmail = "";
+
+    function rememberOtpSession(token, email) {
+      try {
+        sessionStorage.setItem(OTP_SESSION_KEY, JSON.stringify({ token, email }));
+      } catch (_) { /* Private browsing may block storage. */ }
+    }
+
+    function clearRememberedOtpSession() {
+      try { sessionStorage.removeItem(OTP_SESSION_KEY); } catch (_) {}
+    }
+
+    function applyVerifiedTeacher(email) {
+      otpEmail = email;
+      developerVerified = true;
+      teacherAuthorized = true;
+      $("otp-account-label").textContent = "Email verified — booking access granted";
+      $("otp-account-subtitle").textContent = email;
+      if ($("email")) {
+        $("email").value = email;
+        $("email").readOnly = true;
+      }
+      if ($("organizer")) $("organizer").readOnly = false;
+      setTeacherAuthStatus("", "");
+      updateTeacherInterface();
+    }
+
+    async function restoreOtpSession() {
+      let saved;
+      try { saved = JSON.parse(sessionStorage.getItem(OTP_SESSION_KEY) || "null"); }
+      catch (_) { clearRememberedOtpSession(); return; }
+      if (!saved || !saved.token || !saved.email) return;
+      try {
+        const session = await otpRequest("checkTeacherSession", { sessionToken: saved.token });
+        if (!session.authorized) {
+          clearRememberedOtpSession();
+          return;
+        }
+        otpSessionToken = saved.token;
+        applyVerifiedTeacher(session.email || saved.email);
+      } catch (error) {
+        // Fail closed if the backend cannot confirm the session.
+        otpSessionToken = null;
+        teacherAuthorized = false;
+        developerVerified = false;
+        updateTeacherInterface();
+        console.warn("Could not restore verified session:", error);
+      }
+    }
+    
+
+    async function otpRequest(action, payload) {
+      if (AUTH_API_URL.includes("PASTE_YOUR_")) {
+        throw new Error("Add your Apps Script test deployment URL to AUTH_API_URL first.");
+      }
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      try {
+        const response = await fetch(AUTH_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action, ...payload }),
+          signal: controller.signal
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const result = await response.json();
+        return result;
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    $("otp-email-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      const email = $("otp-email").value.trim().toLowerCase();
+      if (!$("otp-email").checkValidity()) {
+        $("otp-email").reportValidity();
+        return;
+      }
+      const btn = $("otp-send");
+      btn.disabled = true;
+      btn.textContent = "Checking...";
+      showOtpHelp(false);
+      setTeacherAuthStatus("loading", "Checking your email address...");
+      try {
+        const result = await otpRequest("requestTeacherCode", { email });
+        if (result.authorized === false) {
+          setTeacherAuthStatus("error", "We couldn’t approve this address for booking.");
+          showOtpHelp(true);
+          return;
+        }
+        if (result.success === false) {
+          setTeacherAuthStatus("error", "We couldn't process your verification request right now. Please try again shortly.");
+          return;
+        }
+        otpEmail = email;
+        $("otp-email-form").hidden = true;
+        $("otp-code-form").hidden = false;
+        $("otp-code").value = "";
+        setTeacherAuthStatus("success", otpRequestConfirmation(result));
+        showOtpHelp(true);
+        $("otp-code").focus();
+      } catch (error) {
+        setTeacherAuthStatus("error", friendlyOtpError(error, "request"));
+        showOtpHelp(true);
+        console.error("OTP request failed:", error);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Send verification code";
+      }
+    });
+
+    $("otp-code-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      const code = $("otp-code").value.trim();
+      if (!/^\d{6}$/.test(code)) {
+        setTeacherAuthStatus("error", "Enter the six-digit code from your email.");
+        return;
+      }
+      const btn = $("otp-verify");
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+      setTeacherAuthStatus("loading", "Checking your code...");
+      try {
+        const result = await otpRequest("verifyTeacherCode", { email: otpEmail, code });
+        if (!result.success || !result.sessionToken) throw new Error("Verification unsuccessful.");
+        const session = await otpRequest("checkTeacherSession", { sessionToken: result.sessionToken });
+        if (!session.authorized) throw new Error("Session not authorized.");
+        otpSessionToken = result.sessionToken;
+        applyVerifiedTeacher(session.email || otpEmail);
+        rememberOtpSession(result.sessionToken, session.email || otpEmail);
+      } catch (error) {
+        setTeacherAuthStatus("error", friendlyOtpError(error, "verify"));
+        console.error("OTP verification failed:", error);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Verify & Continue";
+      }
+    });
+
+    $("otp-change").addEventListener("click", () => {
+      otpEmail = "";
+      $("otp-code-form").hidden = true;
+      $("otp-email-form").hidden = false;
+      setTeacherAuthStatus("", "");
+      showOtpHelp(false);
+    });
+
+    $("otp-resend").addEventListener("click", async () => {
+      const btn = $("otp-resend");
+      btn.disabled = true;
+      setTeacherAuthStatus("loading", "Requesting another code...");
+      try {
+        const result = await otpRequest("requestTeacherCode", { email: otpEmail });
+        if (result.authorized === false) {
+          setTeacherAuthStatus("error", "We couldn’t approve this address for booking.");
+          showOtpHelp(true);
+        } else if (result.success === false) {
+          setTeacherAuthStatus("error", "We couldn't process your verification request right now. Please try again shortly.");
+        } else {
+          setTeacherAuthStatus("success", otpRequestConfirmation(result));
+        showOtpHelp(true);
+        }
+      } catch (error) {
+        setTeacherAuthStatus("error", friendlyOtpError(error, "request"));
+        showOtpHelp(true);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function showTeacherAccessDenied() {
+      teacherAuthorized = false;
+      developerVerified = false;
+      updateTeacherInterface();
+
+      const dialog = $("teacher-denied-dialog");
+
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    }
+
+    $("teacher-denied-close").addEventListener("click", () => {
+      $("teacher-denied-dialog").close();
+
+      document.querySelector(
+        '.tab[data-view="schedule"]'
+      ).click();
+    });
 
     function updateTeacherInterface() {
       const accessScreen = $("teacher-access");
       const bookingContent = $("teacher-booking-content");
 
       // Only display booking tools after authorization.
-      accessScreen.hidden = teacherAuthorized;
-      bookingContent.hidden = !teacherAuthorized;
+      accessScreen.hidden = teacherAuthorized || developerVerified;
+      bookingContent.hidden = !(teacherAuthorized || developerVerified);
+      $("teacher-preview-banner").hidden = !(teacherAuthorized || developerVerified);
 
       // Refresh the schedule so management icons match access.
       renderSchedule();
     }
-
+    $("teacher-preview-exit").addEventListener("click", async () => {
+      const token = otpSessionToken;
+      otpSessionToken = null;
+      otpEmail = "";
+      clearRememberedOtpSession();
+      if ($("email")) $("email").readOnly = false;
+      if ($("organizer")) $("organizer").readOnly = false;
+      developerVerified = false;
+      teacherAuthorized = false;
+      $("otp-email-form").reset();
+      $("otp-code-form").reset();
+      $("otp-code-form").hidden = true;
+      $("otp-email-form").hidden = false;
+      setTeacherAuthStatus("", "");
+      updateTeacherInterface();
+      if (token) {
+        try { await otpRequest("revokeTeacherSession", { sessionToken: token }); }
+        catch (error) { console.warn("Remote sign-out unavailable; local session cleared."); }
+      }
+    });
 
     function formatTime(t) {
       const [h, m] = t.split(":").map(Number);
@@ -2032,6 +2719,7 @@
     }
 
     function checkAvailability() {
+      if (!teacherAuthorized && !developerVerified) return;
       if (!validateForm()) return;
 
       const d = readForm();
@@ -2067,140 +2755,35 @@
     }
 
     async function bookNow() {
+      if (!teacherAuthorized || !otpSessionToken) { showStatus("Please verify your email before booking.", "error"); return; }
       if (!validateForm()) return;
       const d = readForm();
-      if (!validateFutureMeeting(d)) {
-        setIdle();
-        return;
-      }
-      const btn = $("book-btn");
-      btn.disabled = true;
-      btn.textContent = "Booking...";
-
+      if (!validateFutureMeeting(d)) { setIdle(); return; }
+      const btn = $("book-btn"); btn.disabled = true; btn.textContent = "Booking...";
       try {
-        let result;
-
-        try {
-          const response = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8"
-            },
-            body: JSON.stringify({
-              action: "createBooking",
-              booking: d
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error("HTTP error: " + response.status);
-          }
-
-          const rawResponse = await response.text();
-
-          console.log("HTTP status:", response.status);
-          console.log("Raw booking response:", JSON.stringify(rawResponse));
-          console.log("Response URL:", response.url);
-
-          if (!rawResponse.trim()) {
-            throw new Error("Google Apps Script returned an empty response.");
-          }
-
-          result = JSON.parse(rawResponse);
-
-        } catch (error) {
-          console.error("Booking response error:", error);
-          setIdle();
-
-          showStatus(
-            `<strong>Unable to confirm booking.</strong>
-     <p>Your meeting may already have been saved.
-     Please check the schedule before trying again.</p>`,
-            "error"
-          );
-
-          return;
-        }
-
+        const result = await otpRequest("createBooking", {sessionToken: otpSessionToken, booking: {...d, email: otpEmail}});
         if (!result.success) {
-
           if (result.conflict && result.meeting) {
             const c = result.meeting;
-
-            showStatus(
-              `<strong>Bad news. That room was just booked.</strong>
-          <p><strong>${esc(c.name)}</strong> has ${esc(c.room)}
-          from ${formatTime(c.start)} to ${formatTime(c.end)}.</p>
-          <p>Try another room or time.</p>`,
-              "error"
-            );
-
-          } else {
-            showStatus(
-              esc(result.message || "Booking failed. Please check your details."),
-              "error"
-            );
-          }
-
+            showStatus(`<strong>Room unavailable.</strong> ${esc(c.name)} has ${esc(c.room)} from ${formatTime(c.start)} to ${formatTime(c.end)}.`, "error");
+          } else showStatus(esc(result.message || "Booking failed."), "error");
           return;
         }
-
-        // Booking was confirmed by the backend.
-        // Display it immediately without waiting for another API request.
-        const confirmedBooking = {
-          ...d,
-          id: result.booking?.id || ""
-        };
-
-        if (!bookings.some(b => b.id && b.id === confirmedBooking.id)) {
-          bookings.push(confirmedBooking);
-        }
-
-        renderSchedule();
-        updateRoomList();
-
-        // Refresh from Google Sheets in the background.
-        loadBookings();
-
+        bookings.push({...d, id: result.booking.id, email: otpEmail});
+        renderSchedule(); updateRoomList(); loadBookings();
         $("booking-form").reset();
-
-        $("eagle-hint").hidden = true;
-        setIdle();
-
-        showStatus(
-          `<strong>You're booked!</strong>
-          ${esc(d.name)} has ${esc(d.room)} on
-          ${formatDay(d.date)}, ${formatTime(d.start)}
-          to ${formatTime(d.end)}.
-
-          <div class="note">
-            <strong>Management code: ${esc(result.managementCode)}</strong><br>
-            Save this code. You'll need it to edit or cancel this meeting.
-          </div>
-
-          ${result.emailSent
-            ? `<p>📧 Confirmation email sent to ${esc(d.email)}.</p>`
-            : `<p>⚠️ We couldn't send your confirmation email.
-            Please save your management code above.</p>`
-          }
-
-          <button type="button" class="link" id="go-schedule"> View schedule </button>`,
-          "ok"
-        );
-
+        if ($("email")) $("email").value = otpEmail;
+        // Keep organizer name editable; only verified email is filled automatically.
+        $("eagle-hint").hidden = true; setIdle();
+        showStatus(`<strong>You're booked!</strong>
+          <p>${esc(d.name)} has ${esc(d.room)} on ${formatDay(d.date)}, ${formatTime(d.start)} to ${formatTime(d.end)}.</p>
+          <div class="note"><strong>Management code: ${esc(result.managementCode || "See confirmation email")}</strong><p>Save this code. You'll need it to edit or cancel this meeting.</p></div>
+          <p>${result.emailSent ? `📧 Confirmation email sent to ${esc(otpEmail)}.` : "⚠️ Confirmation email could not be confirmed. Save your management code."}</p>
+          <button type="button" class="link" id="go-schedule">View schedule</button>`, "ok");
       } catch (error) {
-
-        console.error(error);
-
-        showStatus(
-          "Couldn't connect to the booking system. Please try again.",
-          "error"
-        );
-
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Book this room";
-      }
+        console.error("Booking request failed", error);
+        showStatus("Unable to confirm booking. Check the schedule before trying again.", "error");
+      } finally { btn.disabled = false; btn.textContent = "Book this room"; }
     }
 
     $("check-btn").addEventListener("click", checkAvailability);
@@ -2311,6 +2894,10 @@
     }
 
 
+    function editIcon() {
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4 10.5-10.5Z"/></svg>`;
+    }
+
     function meetingCard(b) {
       return `
     <article class="meeting" data-type="${esc(b.type)}">
@@ -2321,7 +2908,8 @@
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
       </div>
       <span class="room">${esc(b.room)}</span>
-      ${reminderButton(b)}
+      <div class="meeting-actions">${reminderButton(b)}
+      ${teacherAuthorized ? `<button type="button" class="manage-icon" data-manage-id="${esc(b.id)}" aria-label="Edit or cancel booking" title="Edit or cancel booking">${editIcon()}</button>` : ""}</div>
     </article>`;
     }
 
@@ -2334,7 +2922,8 @@
         <div class="meta">${esc(b.type)} · ${esc(b.organizer)}</div>
         ${b.notes ? `<div class="notes">${esc(b.notes)}</div>` : ""}
         <span class="room">${esc(b.room)}</span>
-        ${reminderButton(b)}
+        <div class="meeting-actions">${reminderButton(b)}
+        ${teacherAuthorized ? `<button type="button" class="manage-icon" data-manage-id="${esc(b.id)}" aria-label="Edit or cancel booking" title="Edit or cancel booking">${editIcon()}</button>` : ""}</div>
       </div>`).join("");
 
       return `
@@ -2352,7 +2941,7 @@
         .sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
 
       if (!items.length) {
-        list.innerHTML = '<p class="empty">No upcoming meetings yet. Be the first to book a room!</p>';
+        list.innerHTML = '<p class="empty">No upcoming meetings yet.</p>';
         return;
       }
 
@@ -2551,19 +3140,13 @@
     }
 
     async function manageRequest(payload) {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error("Server returned " + response.status);
-      const raw = await response.text();
-      if (!raw.trim()) throw new Error("The server returned an empty response.");
-      return JSON.parse(raw);
+      if (!teacherAuthorized || !otpSessionToken) throw new Error("Please verify your email again.");
+      return otpRequest(payload.action, {...payload, sessionToken: otpSessionToken});
     }
 
     $("schedule-list").addEventListener("click", (event) => {
-      const button = event.target.closest(".manage-icon");
+      if (!teacherAuthorized) return;
+      const button = event.target.closest("button.manage-icon");
       if (!button) return;
       const booking = bookings.find(b => String(b.id) === button.dataset.manageId);
       if (!booking) return;
@@ -2724,9 +3307,7 @@
     async function loadBookings() {
       const list = $("schedule-list");
 
-      if (bookings.length === 0) {
-        list.innerHTML = scheduleLoadingMarkup();
-      }
+      list.innerHTML = scheduleLoadingMarkup();
 
       try {
         const response = await fetch(
@@ -2778,8 +3359,10 @@
       }
     }
 
-    loadBookings();
     updateTeacherInterface();
+    restoreOtpSession();
+    loadBookings();
+
   </script>
 </body>
 
