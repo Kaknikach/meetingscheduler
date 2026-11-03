@@ -1834,7 +1834,31 @@
   .otp-help strong { color: #10213f; }
   .otp-help p { margin: 6px 0 0; }
   .otp-help a { color: #087f75; overflow-wrap: anywhere; }
-</style>
+
+    /* Final compact teacher verification layout: show help below the fold. */
+    .teacher-access { min-height: 0; padding: 0 0 10px; align-items: flex-start; }
+    .teacher-access-card { padding: 24px 26px; gap: 10px; }
+    .teacher-access-icon { width: 54px; height: 54px; }
+    .teacher-access-icon svg { width: 27px; height: 27px; }
+    .teacher-access-card h2 { font-size: 1.35rem; }
+    .teacher-access-intro { font-size: .84rem !important; line-height: 1.4; }
+    .otp-auth-form { gap: 8px; }
+    .otp-explanation { font-size: .8rem !important; }
+    .otp-actions button { padding: 4px 0; }
+    .otp-help { margin-top: 2px; padding: 10px 12px; }
+    .teacher-access-note { display: none; }
+    @media (max-width: 600px) {
+      main { padding-top: 10px; }
+      .teacher-access { padding-top: 0; }
+      .teacher-access-card { padding: 18px 16px; gap: 8px; }
+      .teacher-access-icon { width: 46px; height: 46px; }
+      .teacher-access-icon svg { width: 24px; height: 24px; }
+      .teacher-access-card h2 { font-size: 1.22rem; }
+      .teacher-access-intro { font-size: .8rem !important; }
+      .otp-help { padding: 10px 12px; font-size: .8rem; }
+    }
+
+  </style>
 
   <!-- Email code authentication; no Google sign-in library required -->
 
@@ -1881,7 +1905,7 @@
             <button class="otp-primary" type="submit" id="otp-send">Send verification code</button>
           </form>
           <form id="otp-code-form" class="otp-auth-form" hidden>
-            <p class="otp-explanation">Enter the six-digit code sent to your email. It expires in 10 minutes.</p>
+            <p class="otp-explanation">Enter your six-digit code. Expires in 10 minutes.</p>
             <label for="otp-code">Verification code</label>
             <input id="otp-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required>
             <button class="otp-primary" type="submit" id="otp-verify">Verify &amp; Continue</button>
@@ -2352,7 +2376,7 @@
       otpEmail = email;
       developerVerified = true;
       teacherAuthorized = true;
-      $("otp-account-label").textContent = "Email verified — booking access granted";
+      $("otp-account-label").textContent = "Booking Access Granted";
       $("otp-account-subtitle").textContent = email;
       if ($("email")) {
         $("email").value = email;
